@@ -18,3 +18,4 @@ app/build
 /keystore.properties
 *.jks
 *.keystore
+.agents/
