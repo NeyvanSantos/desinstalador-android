@@ -68,7 +68,7 @@
             brandHover: '#D97706',
             brandLight: '#FEF3C7',
             muted: '#8E9BB0',
-            subtle: '#5F6B82'
+            subtle: '#7A879E'
           }
         }
       }
@@ -145,7 +145,7 @@
       </nav>
 
       <div class="flex items-center gap-2.5">
-        <button onclick="toggleQrModal()" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg font-medium text-xs bg-card hover:bg-cardHover text-slate-200 border border-border transition-all active:scale-[0.97]" aria-label="Abrir QR Code para celular">
+        <button onclick="toggleQrModal()" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg font-medium text-xs bg-card hover:bg-cardHover text-slate-200 border border-border transition-all active:scale-[0.97]" aria-label="Abrir QR Code para celular" aria-haspopup="dialog">
           <svg class="w-3.5 h-3.5 text-brand" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
           </svg>
@@ -193,7 +193,7 @@
           <span>Baixar APK Gratuito</span>
           <span class="text-xs bg-black/15 px-2 py-0.5 rounded-md font-bold tabular-nums">1.13 MB</span>
         </a>
-        <button onclick="toggleQrModal()" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-medium text-sm bg-card hover:bg-cardHover text-slate-200 border border-border transition-all active:scale-[0.97]">
+        <button onclick="toggleQrModal()" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-medium text-sm bg-card hover:bg-cardHover text-slate-200 border border-border transition-all active:scale-[0.97]" aria-haspopup="dialog" aria-label="Escanear QR Code no celular">
           <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
           </svg>
@@ -489,7 +489,7 @@
               </svg>
               Download Direto do APK
             </a>
-            <button onclick="toggleQrModal()" class="sm:w-auto inline-flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl font-medium text-sm bg-card hover:bg-cardHover text-slate-200 border border-border transition-all active:scale-[0.97]" aria-label="Escanear com a câmera do celular">
+            <button onclick="toggleQrModal()" class="sm:w-auto inline-flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl font-medium text-sm bg-card hover:bg-cardHover text-slate-200 border border-border transition-all active:scale-[0.97]" aria-label="Escanear com a câmera do celular" aria-haspopup="dialog">
               <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
               </svg>
