@@ -1,12 +1,22 @@
-# 📱 Desinstalador de Android (Batch App Uninstaller)
+<div align="center">
 
-[![Android](https://img.shields.io/badge/Platform-Android_8.0+-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://android.com)
-[![Kotlin](https://img.shields.io/badge/Kotlin-1.9+-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white)](https://kotlinlang.org)
-[![Jetpack Compose](https://img.shields.io/badge/UI-Jetpack_Compose-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose)
-[![Vercel Site](https://img.shields.io/badge/Landing_Page-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://desinstalador-android.vercel.app)
-[![License](https://img.shields.io/badge/License-MIT-amber?style=for-the-badge)](LICENSE)
+# 📱 Desinstalador de Android
+### Batch App Uninstaller for Android
 
-> Aplicativo nativo Android desenvolvido em **Kotlin** e **Jetpack Compose** para remoção rápida e em lote de múltiplos aplicativos com apenas 1 toque. 100% offline, sem necessidade de root, Shizuku ou conexão com computador.
+<p align="center">
+  <a href="https://android.com"><img src="https://img.shields.io/badge/Platform-Android_8.0+-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Platform"></a>
+  <a href="https://kotlinlang.org"><img src="https://img.shields.io/badge/Kotlin-1.9+-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white" alt="Kotlin"></a>
+  <a href="https://developer.android.com/jetpack/compose"><img src="https://img.shields.io/badge/UI-Jetpack_Compose-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white" alt="Jetpack Compose"></a>
+  <a href="https://desinstalador-android.vercel.app"><img src="https://img.shields.io/badge/Landing_Page-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Landing Page"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-amber?style=for-the-badge" alt="License"></a>
+</p>
+
+<p align="center">
+  <strong>Aplicativo nativo Android desenvolvido em Kotlin e Jetpack Compose para remoção rápida e em lote de múltiplos aplicativos com apenas 1 toque.</strong><br>
+  100% offline, sem necessidade de root, Shizuku ou computador.
+</p>
+
+</div>
 
 ---
 
