@@ -4,9 +4,47 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Desinstalador — Remoção de Apps em Lote para Android</title>
-  <meta name="description" content="Desinstale dezenas de aplicativos no Android com um único toque. Sem root, sem dependência de computador e 100% offline.">
+  <meta name="description" content="Desinstale dezenas de aplicativos no Android com apenas um toque. Sem root, sem dependência de computador e 100% offline.">
+  <meta name="author" content="Neyvan Santos">
+  <meta name="theme-color" content="#090A0F">
+  <link rel="canonical" href="https://desinstalador-android.vercel.app">
+
+  <!-- Open Graph / Redes Sociais (ECC SEO Standard) -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://desinstalador-android.vercel.app">
+  <meta property="og:title" content="Desinstalador — Remoção de Apps em Lote para Android">
+  <meta property="og:description" content="Desinstale múltiplos aplicativos no Android com um único toque. 95% mais rápido, 100% offline, sem anúncios e sem necessidade de PC.">
+  <meta property="og:site_name" content="Desinstalador Android">
+  <meta property="og:image" content="https://raw.githubusercontent.com/NeyvanSantos/desinstalador-android/main/.user_uploaded/preview.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Desinstalador — Remoção de Apps em Lote para Android">
+  <meta name="twitter:description" content="Automatize a exclusão de dezenas de apps no Android sem root e com privacidade total.">
+  <meta name="twitter:image" content="https://raw.githubusercontent.com/NeyvanSantos/desinstalador-android/main/.user_uploaded/preview.png">
+
+  <!-- Schema.org JSON-LD (ECC SEO Standard) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Desinstalador de Android",
+    "operatingSystem": "Android 8.0+",
+    "applicationCategory": "UtilitiesApplication",
+    "description": "Aplicativo nativo Android desenvolvido em Kotlin e Jetpack Compose para desinstalação automatizada em lote sem root.",
+    "fileSize": "1.13MB",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "BRL"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Neyvan Santos",
+      "url": "https://github.com/NeyvanSantos"
+    }
+  }
+  </script>
   
-  <!-- Tipografia única, limpa e moderna: Inter -->
+  <!-- Tipografia Inter (ECC Design Standards) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -23,9 +61,9 @@
           colors: {
             background: '#090A0F',
             card: '#12151F',
-            cardHover: '#181D2A',
+            cardHover: '#171B28',
             border: '#1E2333',
-            borderLight: '#2D354D',
+            borderLight: '#2A3247',
             brand: '#F59E0B',
             brandHover: '#D97706',
             brandLight: '#FEF3C7',
@@ -45,27 +83,46 @@
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
-    .hero-glow {
-      background: radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.10) 0%, transparent 60%);
+    
+    /* ECC make-interfaces-feel-better: Equilíbrio tipográfico natural */
+    h1, h2, h3, h4 {
+      text-wrap: balance;
     }
-    /* Otimizações de renderização GPU recomendadas pela skill gsap-performance */
+    p {
+      text-wrap: pretty;
+    }
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+    
+    .hero-glow {
+      background: radial-gradient(circle at 50% -10%, rgba(245, 158, 11, 0.12) 0%, transparent 65%);
+    }
+
+    /* Otimizações GPU GSAP (will-change) */
     .hero-anim, .step-card, .feature-card, .download-card, .bar-fill {
       will-change: transform, opacity;
     }
+
+    /* Foco acessível WCAG 2.2 */
+    a:focus-visible, button:focus-visible, summary:focus-visible {
+      outline: 2px solid #F59E0B;
+      outline-offset: 3px;
+    }
   </style>
 
-  <!-- GSAP Core e ScrollTrigger recomendados pelas skills gsap-core e gsap-scrolltrigger -->
+  <!-- GSAP Core & ScrollTrigger -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 </head>
 <body class="min-h-screen flex flex-col font-sans selection:bg-brand selection:text-black">
 
-  <!-- Navegação Minimalista -->
-  <header class="sticky top-0 z-50 backdrop-blur-md bg-background/80 border-b border-border/80">
+  <!-- Navegação Minimalista com Backdrop Blur -->
+  <header class="sticky top-0 z-40 backdrop-blur-md bg-background/80 border-b border-border/80 transition-colors">
     <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-      <a href="#" class="flex items-center gap-3 group">
-        <div class="w-9 h-9 rounded-xl bg-brand/15 border border-brand/30 flex items-center justify-center text-brand">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <a href="#" class="flex items-center gap-3 group" aria-label="Ir para o topo da página">
+        <div class="w-9 h-9 rounded-xl bg-brand/15 border border-brand/30 flex items-center justify-center text-brand transition-transform group-hover:scale-105">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
           </svg>
         </div>
@@ -74,16 +131,29 @@
         </span>
       </a>
 
-      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-muted">
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-muted" aria-label="Navegação Principal">
         <a href="#como-funciona" class="hover:text-white transition-colors">Como funciona</a>
         <a href="#comparativo" class="hover:text-white transition-colors">Comparativo</a>
         <a href="#recursos" class="hover:text-white transition-colors">Recursos</a>
         <a href="#faq" class="hover:text-white transition-colors">Dúvidas</a>
+        <a href="https://github.com/NeyvanSantos/desinstalador-android" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-1.5">
+          <span>GitHub</span>
+          <svg class="w-3.5 h-3.5 opacity-70" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+          </svg>
+        </a>
       </nav>
 
-      <div class="flex items-center gap-3">
-        <a href="https://drive.usercontent.google.com/download?id=1A3_Tfgt3e6aMz2w-SveTy4DrbQICUGoy&export=download&confirm=t" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-xs tracking-wide uppercase bg-brand hover:bg-brandHover text-black transition-all">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+      <div class="flex items-center gap-2.5">
+        <button onclick="toggleQrModal()" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg font-medium text-xs bg-card hover:bg-cardHover text-slate-200 border border-border transition-all active:scale-[0.97]" aria-label="Abrir QR Code para celular">
+          <svg class="w-3.5 h-3.5 text-brand" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
+          </svg>
+          <span>QR Celular</span>
+        </button>
+
+        <a href="https://drive.usercontent.google.com/download?id=1A3_Tfgt3e6aMz2w-SveTy4DrbQICUGoy&export=download&confirm=t" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-xs tracking-wide uppercase bg-brand hover:bg-brandHover text-black transition-all active:scale-[0.97] shadow-sm">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
           </svg>
           Baixar APK
@@ -94,76 +164,82 @@
 
   <!-- Hero Section -->
   <main class="flex-grow hero-glow">
-    <section class="max-w-4xl mx-auto px-6 pt-20 pb-16 text-center">
+    <section class="max-w-4xl mx-auto px-6 pt-16 sm:pt-20 pb-16 text-center">
       
-      <!-- Pill de status -->
-      <div class="hero-anim hero-badge inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-card border border-border text-xs font-medium text-muted mb-8">
-        <span class="w-2 h-2 rounded-full bg-brand"></span>
+      <!-- Pill de status com concentric border -->
+      <div class="hero-anim hero-badge inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-card/90 border border-border text-xs font-medium text-muted mb-8 shadow-sm">
+        <span class="w-2 h-2 rounded-full bg-brand animate-pulse" aria-hidden="true"></span>
         <span>Versão 1.1 Oficial • Android 8.0 até 15</span>
+        <span class="text-borderLight">•</span>
+        <span class="text-brand font-semibold tabular-nums">~1.13 MB</span>
       </div>
 
-      <!-- Título Principal -->
+      <!-- Título Principal com text-wrap: balance -->
       <h1 class="hero-anim hero-title text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white leading-tight">
         Desinstale vários apps com apenas <span class="text-brand">um toque</span>.
       </h1>
 
-      <!-- Subtítulo -->
+      <!-- Subtítulo com text-wrap: pretty -->
       <p class="hero-anim hero-desc mt-6 text-base sm:text-lg text-muted max-w-2xl mx-auto leading-relaxed">
         Chega de entrar nas configurações e confirmar tela por tela. O Desinstalador automatiza as exclusões no Android com rapidez, sem root e com privacidade total.
       </p>
 
-      <!-- Botões de Ação -->
+      <!-- Botões de Ação com feedback tátil ECC active:scale-[0.97] -->
       <div class="hero-anim hero-actions mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-        <a href="https://drive.usercontent.google.com/download?id=1A3_Tfgt3e6aMz2w-SveTy4DrbQICUGoy&export=download&confirm=t" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-sm bg-brand hover:bg-brandHover text-black shadow-lg shadow-brand/10 transition-all">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <a href="https://drive.usercontent.google.com/download?id=1A3_Tfgt3e6aMz2w-SveTy4DrbQICUGoy&export=download&confirm=t" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-sm bg-brand hover:bg-brandHover text-black shadow-lg shadow-brand/10 transition-all active:scale-[0.97]">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
           </svg>
-          Baixar APK Gratuito
+          <span>Baixar APK Gratuito</span>
+          <span class="text-xs bg-black/15 px-2 py-0.5 rounded-md font-bold tabular-nums">1.13 MB</span>
         </a>
-        <a href="#como-funciona" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-medium text-sm bg-card hover:bg-cardHover text-slate-200 border border-border transition-colors">
-          Entenda como funciona
-        </a>
+        <button onclick="toggleQrModal()" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-medium text-sm bg-card hover:bg-cardHover text-slate-200 border border-border transition-all active:scale-[0.97]">
+          <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
+          </svg>
+          Escanear no Celular
+        </button>
       </div>
 
       <!-- Selos de Confiança -->
       <div class="hero-anim hero-trust mt-12 flex flex-wrap justify-center items-center gap-6 text-xs text-subtle font-medium">
         <span class="flex items-center gap-1.5">
-          <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
           Sem Root
         </span>
-        <span class="text-border">•</span>
+        <span class="text-border" aria-hidden="true">•</span>
         <span class="flex items-center gap-1.5">
-          <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-          100% Offline (Zero Anúncios)
+          <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          100% Offline (Sem Permissão de Rede)
         </span>
-        <span class="text-border">•</span>
+        <span class="text-border" aria-hidden="true">•</span>
         <span class="flex items-center gap-1.5">
-          <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-          Sem Shizuku ou PC
+          <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          Sem Shizuku ou Cabo USB
         </span>
       </div>
 
-      <!-- Mockup Minimalista do App -->
+      <!-- Mockup Minimalista com Concentric Radii (ECC make-interfaces-feel-better: outer = inner + padding) -->
       <div class="hero-anim hero-mockup mt-14 max-w-sm mx-auto">
-        <div class="bg-card p-3 rounded-3xl border border-border shadow-2xl">
-          <div class="bg-background rounded-2xl p-4 border border-border/50 text-left">
+        <div class="bg-card p-3 rounded-[28px] border border-border shadow-2xl transition-all duration-300 hover:border-brand/30 hover:shadow-brand/5">
+          <div class="bg-background rounded-[20px] p-4 border border-border/60 text-left">
             
             <!-- Barra superior simulada -->
             <div class="flex justify-between items-center pb-3 border-b border-border/50">
               <span class="text-xs font-bold text-white">Aplicativos Instalados</span>
-              <span class="text-[10px] font-semibold text-brand bg-brand/10 px-2 py-0.5 rounded-full">
+              <span class="text-[10px] font-semibold text-brand bg-brand/10 px-2.5 py-0.5 rounded-full tabular-nums">
                 3 selecionados
               </span>
             </div>
 
-            <!-- Lista de exemplo -->
+            <!-- Lista de exemplo com cantos concêntricos -->
             <div class="py-3 space-y-2">
               <div class="p-2.5 rounded-xl bg-card border border-brand/40 flex items-center justify-between">
                 <div>
                   <div class="text-xs font-semibold text-white">Jogo em Desuso</div>
-                  <div class="text-[10px] text-muted">4.2 GB • Liberar espaço</div>
+                  <div class="text-[10px] text-muted tabular-nums">4.2 GB • Liberar espaço</div>
                 </div>
-                <div class="w-4 h-4 rounded bg-brand flex items-center justify-center text-black">
+                <div class="w-4 h-4 rounded bg-brand flex items-center justify-center text-black" aria-hidden="true">
                   <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                 </div>
               </div>
@@ -171,9 +247,9 @@
               <div class="p-2.5 rounded-xl bg-card border border-brand/40 flex items-center justify-between">
                 <div>
                   <div class="text-xs font-semibold text-white">Rede Social com Cache</div>
-                  <div class="text-[10px] text-muted">2.1 GB • Liberar espaço</div>
+                  <div class="text-[10px] text-muted tabular-nums">2.1 GB • Liberar espaço</div>
                 </div>
-                <div class="w-4 h-4 rounded bg-brand flex items-center justify-center text-black">
+                <div class="w-4 h-4 rounded bg-brand flex items-center justify-center text-black" aria-hidden="true">
                   <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                 </div>
               </div>
@@ -181,18 +257,18 @@
               <div class="p-2.5 rounded-xl bg-card border border-brand/40 flex items-center justify-between">
                 <div>
                   <div class="text-xs font-semibold text-white">App de Vídeo Antigo</div>
-                  <div class="text-[10px] text-muted">1.4 GB • Liberar espaço</div>
+                  <div class="text-[10px] text-muted tabular-nums">1.4 GB • Liberar espaço</div>
                 </div>
-                <div class="w-4 h-4 rounded bg-brand flex items-center justify-center text-black">
+                <div class="w-4 h-4 rounded bg-brand flex items-center justify-center text-black" aria-hidden="true">
                   <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                 </div>
               </div>
             </div>
 
             <!-- Botão flutuante simulado -->
-            <div class="mt-2 py-2.5 rounded-xl bg-brand text-black font-bold text-xs text-center flex items-center justify-center gap-2">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-              <span>Desinstalar 3 apps (7.7 GB livres)</span>
+            <div class="mt-2 py-2.5 rounded-xl bg-brand text-black font-bold text-xs text-center flex items-center justify-center gap-2 shadow-sm">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+              <span>Desinstalar 3 apps (<span class="tabular-nums">7.7 GB</span> livres)</span>
             </div>
 
           </div>
@@ -210,35 +286,35 @@
           <p class="text-2xl sm:text-3xl font-bold text-white mt-2">Como o app funciona na prática</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           
-          <div class="step-card bg-card p-6 rounded-2xl border border-border">
-            <div class="w-8 h-8 rounded-lg bg-brand/10 border border-brand/20 flex items-center justify-center text-brand font-bold text-sm mb-4">
+          <div class="step-card bg-card p-6 rounded-2xl border border-border transition-all duration-200 hover:-translate-y-1 hover:border-borderLight">
+            <div class="w-8 h-8 rounded-lg bg-brand/10 border border-brand/20 flex items-center justify-center text-brand font-bold text-sm mb-4 tabular-nums">
               1
             </div>
             <h3 class="text-base font-bold text-white">Escolha os apps</h3>
             <p class="mt-2 text-sm text-muted leading-relaxed">
-              Filtre por nome ou ordene por tamanho para identificar rapidamente o que está ocupando mais memória.
+              Filtre por nome ou ordene por tamanho para identificar instantaneamente o que está consumindo o armazenamento do seu aparelho.
             </p>
           </div>
 
-          <div class="step-card bg-card p-6 rounded-2xl border border-border">
-            <div class="w-8 h-8 rounded-lg bg-brand/10 border border-brand/20 flex items-center justify-center text-brand font-bold text-sm mb-4">
+          <div class="step-card bg-card p-6 rounded-2xl border border-border transition-all duration-200 hover:-translate-y-1 hover:border-borderLight">
+            <div class="w-8 h-8 rounded-lg bg-brand/10 border border-brand/20 flex items-center justify-center text-brand font-bold text-sm mb-4 tabular-nums">
               2
             </div>
             <h3 class="text-base font-bold text-white">Ative a Acessibilidade</h3>
             <p class="mt-2 text-sm text-muted leading-relaxed">
-              O assistente utiliza o serviço nativo do Android apenas para automatizar o clique nos pop-ups de confirmação.
+              O assistente utiliza a API nativa de acessibilidade do Android unicamente para confirmar os diálogos do sistema sem intervenção manual.
             </p>
           </div>
 
-          <div class="step-card bg-card p-6 rounded-2xl border border-border">
-            <div class="w-8 h-8 rounded-lg bg-brand/10 border border-brand/20 flex items-center justify-center text-brand font-bold text-sm mb-4">
+          <div class="step-card bg-card p-6 rounded-2xl border border-border transition-all duration-200 hover:-translate-y-1 hover:border-borderLight">
+            <div class="w-8 h-8 rounded-lg bg-brand/10 border border-brand/20 flex items-center justify-center text-brand font-bold text-sm mb-4 tabular-nums">
               3
             </div>
             <h3 class="text-base font-bold text-white">Limpeza em sequência</h3>
             <p class="mt-2 text-sm text-muted leading-relaxed">
-              Toque no botão e acompanhe a remoção automática. O app fecha a fila e se desativa sozinho ao terminar.
+              Toque no botão e acompanhe o progresso. A fila é finalizada automaticamente e o serviço de acessibilidade se auto-desarma ao terminar.
             </p>
           </div>
 
@@ -253,7 +329,7 @@
       <div class="text-center max-w-xl mx-auto mb-12">
         <h2 class="text-xs font-bold uppercase tracking-widest text-brand">Comparativo de Produtividade</h2>
         <p class="text-2xl sm:text-3xl font-bold text-white mt-2">Tempo real economizado</p>
-        <p class="mt-3 text-sm text-muted">Média necessária para desinstalar 15 aplicativos volumosos no Android:</p>
+        <p class="mt-3 text-sm text-muted">Média necessária para desinstalar 15 aplicativos comuns no Android:</p>
       </div>
 
       <div class="space-y-4">
@@ -262,10 +338,10 @@
         <div class="bg-card p-6 rounded-2xl border border-border">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-3">
             <div class="flex items-center gap-2">
-              <svg class="w-4 h-4 text-rose-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <svg class="w-4 h-4 text-rose-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
               <span class="text-xs font-medium text-muted">Método Manual (Configurações do Android)</span>
             </div>
-            <span class="text-sm font-semibold text-rose-400">~ 4 min 20 s</span>
+            <span class="text-sm font-semibold text-rose-400 tabular-nums">~ 4 min 20 s</span>
           </div>
           <div class="w-full h-2.5 bg-background rounded-full overflow-hidden p-0.5 border border-border/60">
             <div class="bar-fill bar-manual h-full bg-rose-500/80 rounded-full" style="width: 100%;"></div>
@@ -279,13 +355,13 @@
         <div class="bg-card p-6 rounded-2xl border border-brand/40 shadow-lg shadow-brand/5">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-3">
             <div class="flex items-center gap-2">
-              <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
               <span class="text-xs font-bold text-white">Desinstalador em Lote</span>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand/15 text-brand border border-brand/20">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand/15 text-brand border border-brand/20 tabular-nums">
                 95% mais rápido
               </span>
             </div>
-            <span class="text-sm font-bold text-emerald-400">~ 12 segundos</span>
+            <span class="text-sm font-bold text-emerald-400 tabular-nums">~ 12 segundos</span>
           </div>
           <div class="w-full h-2.5 bg-background rounded-full overflow-hidden p-0.5 border border-border/60">
             <div class="bar-fill bar-fast h-full bg-gradient-to-r from-brand to-emerald-400 rounded-full" style="width: 6%;"></div>
@@ -299,65 +375,65 @@
 
     </section>
 
-    <!-- Recursos em Destaque com Ícones Vetoriais Profissionais -->
+    <!-- Recursos em Destaque com Ícones Vetoriais e Microinterações -->
     <section id="recursos" class="py-20 max-w-5xl mx-auto px-6 border-t border-border/80">
       
       <div class="text-center max-w-xl mx-auto mb-14">
         <h2 class="text-xs font-bold uppercase tracking-widest text-brand">Vantagens</h2>
-        <p class="text-2xl sm:text-3xl font-bold text-white mt-2">Construído para ser leve e seguro</p>
+        <p class="text-2xl sm:text-3xl font-bold text-white mt-2">Construído para ser leve, rápido e seguro</p>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         
         <!-- Card 1: Velocidade -->
-        <div class="feature-card p-6 rounded-2xl bg-card border border-border">
+        <div class="feature-card p-6 rounded-2xl bg-card border border-border transition-all duration-200 hover:-translate-y-1 hover:border-brand/40 hover:shadow-xl hover:shadow-brand/5">
           <div class="w-10 h-10 rounded-xl bg-brand/10 border border-brand/20 flex items-center justify-center text-brand mb-4">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
             </svg>
           </div>
-          <h3 class="text-base font-bold text-white">Rápido e Direto</h3>
+          <h3 class="text-base font-bold text-white">Carregamento Instantâneo</h3>
           <p class="mt-2 text-sm text-muted leading-relaxed">
-            Inicialização instantânea. Escaneia centenas de aplicativos instalados em menos de 2 segundos sem congelar o celular.
+            Escaneia e calcula o tamanho real de mais de 600 aplicativos em menos de 2 segundos, utilizando carregamento sob demanda sem congelar a interface.
           </p>
         </div>
 
         <!-- Card 2: Offline -->
-        <div class="feature-card p-6 rounded-2xl bg-card border border-border">
+        <div class="feature-card p-6 rounded-2xl bg-card border border-border transition-all duration-200 hover:-translate-y-1 hover:border-brand/40 hover:shadow-xl hover:shadow-brand/5">
           <div class="w-10 h-10 rounded-xl bg-brand/10 border border-brand/20 flex items-center justify-center text-brand mb-4">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
             </svg>
           </div>
-          <h3 class="text-base font-bold text-white">Totalmente Offline</h3>
+          <h3 class="text-base font-bold text-white">100% Offline & Seguro</h3>
           <p class="mt-2 text-sm text-muted leading-relaxed">
-            O aplicativo não possui permissão de internet declarada. Nenhum dado do seu dispositivo é coletado ou enviado para a nuvem.
+            Zero permissão de internet declarada no manifesto. Nenhum dado do seu dispositivo ou lista de aplicativos é rastreado ou transmitido para servidores.
           </p>
         </div>
 
-        <!-- Card 3: Blindagem -->
-        <div class="feature-card p-6 rounded-2xl bg-card border border-border">
+        <!-- Card 3: Blindagem Anti-Tapjacking -->
+        <div class="feature-card p-6 rounded-2xl bg-card border border-border transition-all duration-200 hover:-translate-y-1 hover:border-brand/40 hover:shadow-xl hover:shadow-brand/5">
           <div class="w-10 h-10 rounded-xl bg-brand/10 border border-brand/20 flex items-center justify-center text-brand mb-4">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
             </svg>
           </div>
-          <h3 class="text-base font-bold text-white">Blindagem de Sistema</h3>
+          <h3 class="text-base font-bold text-white">Proteção contra Exclusão Vital</h3>
           <p class="mt-2 text-sm text-muted leading-relaxed">
-            Apps vitais do celular (Google Play Store, WebView, ajustes e launchers de fábrica) são protegidos contra remoção acidental.
+            Whitelist inteligente que bloqueia a remoção acidental de componentes essenciais (Google Play Store, WebView, ajustes do sistema e launchers).
           </p>
         </div>
 
-        <!-- Card 4: OLED -->
-        <div class="feature-card p-6 rounded-2xl bg-card border border-border">
+        <!-- Card 4: OLED & Bateria -->
+        <div class="feature-card p-6 rounded-2xl bg-card border border-border transition-all duration-200 hover:-translate-y-1 hover:border-brand/40 hover:shadow-xl hover:shadow-brand/5">
           <div class="w-10 h-10 rounded-xl bg-brand/10 border border-brand/20 flex items-center justify-center text-brand mb-4">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
             </svg>
           </div>
           <h3 class="text-base font-bold text-white">Tema Escuro OLED</h3>
           <p class="mt-2 text-sm text-muted leading-relaxed">
-            Interface moderna em Material Design 3 otimizada com pretos puros para economizar bateria em telas AMOLED.
+            Interface moderna em Material Design 3 otimizada com pretos puros para máxima economia de energia em telas AMOLED e OLED.
           </p>
         </div>
 
@@ -369,46 +445,56 @@
     <section id="download" class="border-t border-border/80 bg-card/30 py-20">
       <div class="max-w-2xl mx-auto px-6 text-center">
         
-        <h2 class="text-2xl sm:text-3xl font-bold text-white">Baixe o Desinstalador</h2>
+        <h2 class="text-2xl sm:text-3xl font-bold text-white">Instale no seu Android</h2>
         <p class="mt-3 text-sm text-muted">
-          Instalação direta via arquivo APK. Sem lojas intermediárias, sem anúncios e sem custos.
+          Instalação direta via arquivo APK compacto. Sem lojas intermediárias, sem anúncios e sem custos.
         </p>
 
         <!-- Card de Download -->
-        <div class="download-card mt-8 bg-card border border-border rounded-2xl p-6 text-left">
+        <div class="download-card mt-8 bg-card border border-border rounded-2xl p-6 text-left shadow-lg">
           
           <div class="flex items-center justify-between pb-4 border-b border-border">
             <div>
               <div class="font-bold text-white text-base">Desinstalador APK</div>
-              <div class="text-xs text-muted">Versão 1.1 • Android 8.0 ou superior</div>
+              <div class="text-xs text-muted">Versão 1.1 Oficial • Android 8.0 até 15</div>
             </div>
             <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-              Oficial
+              Build Verificada
             </span>
           </div>
 
-          <div class="py-4 space-y-2 text-xs text-muted">
-            <div class="flex justify-between">
-              <span>Tamanho do arquivo:</span>
-              <span class="text-white font-medium">~1.13 MB (Otimizado)</span>
+          <div class="py-4 space-y-2.5 text-xs text-muted">
+            <div class="flex justify-between items-center">
+              <span>Tamanho do download:</span>
+              <span class="text-white font-medium tabular-nums">~1.13 MB (Otimizado com R8)</span>
             </div>
-            <div class="flex justify-between">
+            <div class="flex justify-between items-center">
               <span>Permissões de rede:</span>
-              <span class="text-emerald-400 font-medium">Nenhuma (Offline)</span>
+              <span class="text-emerald-400 font-medium">Nenhuma (100% Offline)</span>
             </div>
-            <div class="flex justify-between">
-              <span>Compatibilidade:</span>
-              <span class="text-white font-medium">Xiaomi, Samsung, Motorola, Pixel e outros</span>
+            <div class="flex justify-between items-center">
+              <span>Dispositivos compatíveis:</span>
+              <span class="text-white font-medium">Xiaomi, Samsung, Motorola, Pixel e AOSP</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span>Código aberto:</span>
+              <a href="https://github.com/NeyvanSantos/desinstalador-android" target="_blank" rel="noopener noreferrer" class="text-brand hover:underline font-medium">GitHub Repository</a>
             </div>
           </div>
 
-          <div class="pt-2">
-            <a href="https://drive.usercontent.google.com/download?id=1A3_Tfgt3e6aMz2w-SveTy4DrbQICUGoy&export=download&confirm=t" class="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm bg-brand hover:bg-brandHover text-black transition-all">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <div class="pt-2 flex flex-col sm:flex-row gap-2.5">
+            <a href="https://drive.usercontent.google.com/download?id=1A3_Tfgt3e6aMz2w-SveTy4DrbQICUGoy&export=download&confirm=t" class="flex-1 inline-flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl font-semibold text-sm bg-brand hover:bg-brandHover text-black transition-all active:scale-[0.97] shadow-sm">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
               </svg>
               Download Direto do APK
             </a>
+            <button onclick="toggleQrModal()" class="sm:w-auto inline-flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl font-medium text-sm bg-card hover:bg-cardHover text-slate-200 border border-border transition-all active:scale-[0.97]" aria-label="Escanear com a câmera do celular">
+              <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
+              </svg>
+              QR Code
+            </button>
           </div>
 
         </div>
@@ -416,7 +502,7 @@
       </div>
     </section>
 
-    <!-- FAQ -->
+    <!-- FAQ com Detalhes Semânticos Acessíveis -->
     <section id="faq" class="py-20 max-w-2xl mx-auto px-6">
       
       <div class="text-center mb-10">
@@ -426,10 +512,10 @@
 
       <div class="space-y-4">
         
-        <details class="bg-card p-5 rounded-xl border border-border group cursor-pointer">
+        <details class="bg-card p-5 rounded-xl border border-border group cursor-pointer transition-colors hover:border-borderLight">
           <summary class="font-semibold text-sm text-white flex justify-between items-center list-none">
             Precisa de Root ou computador?
-            <svg class="w-4 h-4 text-muted group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-4 h-4 text-muted group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
             </svg>
           </summary>
@@ -438,10 +524,10 @@
           </p>
         </details>
 
-        <details class="bg-card p-5 rounded-xl border border-border group cursor-pointer">
+        <details class="bg-card p-5 rounded-xl border border-border group cursor-pointer transition-colors hover:border-borderLight">
           <summary class="font-semibold text-sm text-white flex justify-between items-center list-none">
             Posso apagar apps do sistema por engano?
-            <svg class="w-4 h-4 text-muted group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-4 h-4 text-muted group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
             </svg>
           </summary>
@@ -450,15 +536,27 @@
           </p>
         </details>
 
-        <details class="bg-card p-5 rounded-xl border border-border group cursor-pointer">
+        <details class="bg-card p-5 rounded-xl border border-border group cursor-pointer transition-colors hover:border-borderLight">
           <summary class="font-semibold text-sm text-white flex justify-between items-center list-none">
             O aplicativo é gratuito?
-            <svg class="w-4 h-4 text-muted group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-4 h-4 text-muted group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
             </svg>
           </summary>
           <p class="mt-3 text-xs text-muted leading-relaxed">
-            Sim, 100% gratuito e sem nenhum anúncio ou cobrança embutida.
+            Sim, 100% gratuito e livre de anúncios, rastreadores ou cobranças embutidas. O código-fonte é público e transparente.
+          </p>
+        </details>
+
+        <details class="bg-card p-5 rounded-xl border border-border group cursor-pointer transition-colors hover:border-borderLight">
+          <summary class="font-semibold text-sm text-white flex justify-between items-center list-none">
+            Como instalar o APK baixado?
+            <svg class="w-4 h-4 text-muted group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </summary>
+          <p class="mt-3 text-xs text-muted leading-relaxed">
+            Após o download, toque na notificação de conclusão ou abra a pasta de Downloads no seu celular. Caso solicitado pelo Android, permita "Instalar fontes desconhecidas" para o seu navegador ou gerenciador de arquivos e conclua a instalação normalmente.
           </p>
         </details>
 
@@ -468,30 +566,91 @@
 
   </main>
 
+  <!-- Modal Interativo de QR Code para Celular (WCAG 2.2 Accessible Dialog) -->
+  <div id="qr-modal" role="dialog" aria-modal="true" aria-labelledby="qr-modal-title" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4 transition-opacity">
+    <div class="bg-card border border-border rounded-2xl max-w-sm w-full p-6 text-center shadow-2xl relative">
+      <button onclick="toggleQrModal()" class="absolute top-4 right-4 text-muted hover:text-white p-1 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand" aria-label="Fechar janela modal">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+
+      <div class="w-10 h-10 rounded-xl bg-brand/10 border border-brand/20 flex items-center justify-center text-brand mx-auto mb-3">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
+        </svg>
+      </div>
+
+      <h3 id="qr-modal-title" class="text-lg font-bold text-white">Escanear no Celular</h3>
+      <p class="text-xs text-muted mt-1 mb-4">Aponte a câmera do seu Android para fazer o download direto:</p>
+
+      <div class="bg-white p-3 rounded-xl inline-block mx-auto mb-4 shadow-md">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Fdesinstalador-android.vercel.app&color=090A0F" alt="QR Code para Download do Desinstalador" width="180" height="180" class="block" loading="lazy">
+      </div>
+
+      <div class="flex items-center justify-center gap-2 text-xs text-subtle font-medium">
+        <span>URL:</span>
+        <code class="text-brand bg-cardHover px-2 py-0.5 rounded border border-border">desinstalador-android.vercel.app</code>
+      </div>
+    </div>
+  </div>
+
   <!-- Rodapé Simples e Limpo -->
   <footer class="border-t border-border py-8 bg-background text-xs text-subtle">
     <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-2">
         <span class="font-bold text-white">Desinstalador</span>
-        <span>•</span>
+        <span aria-hidden="true">•</span>
         <span>Desenvolvido por Neyvan Santos</span>
       </div>
       <div class="flex gap-6">
         <a href="#como-funciona" class="hover:text-white transition-colors">Como funciona</a>
         <a href="#comparativo" class="hover:text-white transition-colors">Comparativo</a>
         <a href="#recursos" class="hover:text-white transition-colors">Recursos</a>
-        <a href="#download" class="hover:text-white transition-colors">Download</a>
+        <a href="https://github.com/NeyvanSantos/desinstalador-android" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">GitHub</a>
       </div>
     </div>
   </footer>
 
-  <!-- Script GSAP seguindo rigorosamente as recomendações das skills:
-       - gsap-core (autoAlpha, camelCase, ease: power2/power3.out, staggers)
-       - gsap-performance (somente transform/y/scaleX e autoAlpha, will-change, zero layout thrash)
-       - gsap-scrolltrigger (gatilhos no viewport, once: true)
-       - gsap.matchMedia (respeito a prefers-reduced-motion)
-  -->
+  <!-- Script Interativo e GSAP -->
   <script>
+    // Controle do Modal QR Code com acessibilidade
+    function toggleQrModal() {
+      const modal = document.getElementById('qr-modal');
+      if (modal) {
+        const isHidden = modal.classList.contains('hidden');
+        if (isHidden) {
+          modal.classList.remove('hidden');
+          modal.classList.add('flex');
+          document.body.style.overflow = 'hidden';
+          const closeBtn = modal.querySelector('button');
+          if (closeBtn) closeBtn.focus();
+        } else {
+          modal.classList.remove('flex');
+          modal.classList.add('hidden');
+          document.body.style.overflow = '';
+        }
+      }
+    }
+
+    // Fechar modal ao clicar fora
+    window.addEventListener('click', (e) => {
+      const modal = document.getElementById('qr-modal');
+      if (modal && e.target === modal) {
+        toggleQrModal();
+      }
+    });
+
+    // Fechar modal com a tecla Escape (WCAG 2.2)
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('qr-modal');
+        if (modal && !modal.classList.contains('hidden')) {
+          toggleQrModal();
+        }
+      }
+    });
+
     document.addEventListener("DOMContentLoaded", () => {
       if (typeof gsap === "undefined") return;
 
@@ -514,7 +673,7 @@
           .from(".hero-trust", { autoAlpha: 0, duration: 0.5 }, "-=0.35")
           .from(".hero-mockup", { y: 24, autoAlpha: 0, duration: 0.8, ease: "power2.out" }, "-=0.4");
 
-        // 2. Revelação dos 3 Passos com Stagger e ScrollTrigger
+        // 2. Revelação dos 3 Passos com Stagger
         gsap.from(".step-card", {
           y: 25,
           autoAlpha: 0,
