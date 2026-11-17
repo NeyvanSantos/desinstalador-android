@@ -221,7 +221,7 @@ private fun UninstallerScreen(
                     .padding(horizontal = 20.dp, vertical = 8.dp)
             ) {
                 Text(
-                    text = "Desinstalador",
+                    text = "DesinstalaJá",
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onBackground

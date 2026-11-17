@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Desinstalador</string>
+    <string name="app_name">DesinstalaJá</string>
     <string name="accessibility_service_name">Desinstalação Automática</string>
-    <string name="accessibility_service_description">Permite que o aplicativo Desinstalador confirme automaticamente as mensagens de desinstalação sem precisar clicar uma a uma.</string>
+    <string name="accessibility_service_description">Permite que o aplicativo DesinstalaJá confirme automaticamente as mensagens de desinstalação sem precisar clicar uma a uma.</string>
 </resources>

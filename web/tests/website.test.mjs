@@ -72,10 +72,16 @@ test('10. [Código Real] Painel exibe apenas classes e arquivos que existem no r
   assert.ok(html.includes('DEFAULT_TIMEOUT_MS'), 'Timeout real de 15 s deve aparecer no código');
 });
 
-test('11. [Consistência de Build] Badge Kotlin 2.0.21 e favicon embutido', () => {
+test('11. [Consistência de Build] Badge Kotlin 2.0.21 e identidade visual', () => {
+  assert.ok(html.includes('<title>DesinstalaJá'), 'Título deve exibir o novo nome do produto');
   assert.ok(html.includes('KOTLIN 2.0.21'), 'Badge deve refletir a versão real do Kotlin');
   assert.ok(!html.includes('KOTLIN 1.9'), 'Badge não deve exibir versão antiga');
-  assert.ok(html.includes('rel="icon"'), 'Página deve declarar favicon para evitar 404');
+  assert.ok(html.includes('href="/favicon.ico"'), 'Página deve usar o favicon da marca');
+  assert.ok(html.includes('src="/logo.png"'), 'Cabeçalho deve usar o logo fornecido');
+  const icoPath = path.resolve(__dirname, '../favicon.ico');
+  const ico = fs.readFileSync(icoPath);
+  assert.deepEqual([...ico.subarray(0, 4)], [0, 0, 1, 0], 'Favicon deve ter cabeçalho ICO válido');
+  assert.ok(ico.readUInt16LE(4) > 0, 'Favicon deve conter ao menos um tamanho');
 });
 
 test('12. [Acessibilidade WCAG] Abas de código com semântica ARIA', () => {

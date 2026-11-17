@@ -149,7 +149,7 @@ fun AppSplashScreen(
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_launcher),
-                        contentDescription = "Logotipo Desinstalador",
+                        contentDescription = "Logotipo DesinstalaJá",
                         modifier = Modifier
                             .size(76.dp)
                             .clip(RoundedCornerShape(20.dp))
@@ -164,7 +164,7 @@ fun AppSplashScreen(
                     modifier = Modifier.alpha(textAlpha.value)
                 ) {
                     Text(
-                        text = "Desinstalador",
+                        text = "DesinstalaJá",
                         style = MaterialTheme.typography.headlineMedium,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onBackground,
