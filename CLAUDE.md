@@ -1,3 +1,7 @@
+@AGENTS.md
+
+<!-- Importa as regras canônicas de AGENTS.md: vault Obsidian, GitNexus e convenções do projeto. -->
+
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 

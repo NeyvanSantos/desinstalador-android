@@ -1,0 +1,3 @@
+# Aider não lê AGENTS.md automaticamente; carregue como contexto somente leitura.
+read:
+  - AGENTS.md
