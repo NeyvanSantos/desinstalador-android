@@ -13,7 +13,6 @@ test('1. [Semântica HTML5] Estrutura hierárquica e tags semânticas completas'
   assert.ok(html.includes('<section'), 'Section deve estar presente');
   assert.ok(html.includes('<footer'), 'Footer deve estar presente');
   
-  // Deve haver apenas um H1 na página (SEO e acessibilidade)
   const h1Matches = html.match(/<h1[\s>]/g) || [];
   assert.strictEqual(h1Matches.length, 1, 'Deve existir exatamente 1 elemento <h1> na página');
 });
@@ -48,7 +47,14 @@ test('6. [SEO & Metadados] Schema.org SoftwareApplication e Open Graph', () => {
   assert.ok(html.includes('name="theme-color"'), 'Tag theme-color deve estar presente');
 });
 
-test('7. [Novo Site - Simulador Interativo de Economia] Deve conter elementos do simulador dinâmico', () => {
-  assert.ok(html.includes('id="app-slider"') || html.includes('calc-slider') || html.includes('simulador'), 'O novo site deve conter a calculadora/simulador interativo de produtividade');
-  assert.ok(html.includes('id="interactive-mockup"') || html.includes('hero-mockup-interactive'), 'O novo site deve conter o mockup interativo clicável');
+test('7. [Design Distinto - Diagnóstico por Fabricante OEM] Filtros Xiaomi, Samsung e Pixel', () => {
+  assert.ok(html.includes('data-oem="xiaomi"') || html.includes('selectOem("xiaomi")') || html.includes('id="oem-selector"'), 'Deve conter seletor de diagnósticos por fabricante Android (Xiaomi, Samsung, Pixel)');
+});
+
+test('8. [Design Distinto - Storage Breakdown Gauge] Régua visual de armazenamento em disco', () => {
+  assert.ok(html.includes('id="storage-gauge"') || html.includes('storage-breakdown'), 'Deve conter o gráfico/régua de armazenamento em disco dinâmico');
+});
+
+test('9. [Design Distinto - Inspetor de Engenharia & Código Real] Trechos Kotlin/Compose', () => {
+  assert.ok(html.includes('BatchUninstallService') || html.includes('AccessibilityService'), 'Deve exibir a engenharia real com trecho de código auditável');
 });
