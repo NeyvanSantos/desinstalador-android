@@ -7,6 +7,7 @@
   <meta name="description" content="O Android te obriga a tocar na tela 50 vezes para desinstalar 20 apps. O Desinstalador automatiza isso em 12 segundos com acessibilidade nativa, sem root e 100% offline.">
   <meta name="author" content="Neyvan Santos">
   <meta name="theme-color" content="#04060A">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%2304060A'/%3E%3Cpath d='M8 9h8l-.7 9.1a1 1 0 0 1-1 .9H9.7a1 1 0 0 1-1-.9L8 9Zm2-2V6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1m-7 2h10' fill='none' stroke='%23F59E0B' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
   <link rel="canonical" href="https://desinstalador-android.vercel.app">
 
   <!-- Open Graph & Twitter Cards (SEO & Social Previews) -->
@@ -134,9 +135,9 @@
 
   <!-- Header Flutuante de Precisão -->
   <header class="sticky top-0 z-40 backdrop-blur-xl bg-background/85 border-b border-border/70 transition-colors">
-    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
       
-      <a href="#" class="flex items-center gap-3 group" aria-label="Desinstalador Android - Página Inicial">
+      <a href="#" class="flex items-center gap-3 group shrink-0">
         <div class="w-9 h-9 rounded-xl bg-brand/15 border border-brand/30 flex items-center justify-center text-brand transition-transform group-hover:scale-105 shadow-sm">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -150,13 +151,11 @@
         </div>
       </a>
 
-      <nav class="hidden md:flex items-center gap-7 text-xs font-semibold text-muted uppercase tracking-wider" aria-label="Navegação Principal">
-        <a href="#diagnostico" class="hover:text-white transition-colors">Raio-X de Apps</a>
-        <a href="#simulador" class="hover:text-white transition-colors">Simulador</a>
-        <a href="#engenharia" class="hover:text-white transition-colors">Código & Segurança</a>
-        <a href="#comparativo" class="hover:text-white transition-colors">Comparativo</a>
-        <a href="#faq" class="hover:text-white transition-colors">Dúvidas</a>
-        <a href="https://github.com/NeyvanSantos/desinstalador-android" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-1 normal-case font-medium" aria-label="Repositório no GitHub (abre em nova aba)">
+      <nav class="hidden lg:flex items-center gap-6 xl:gap-7 text-xs font-semibold text-muted uppercase tracking-wider" aria-label="Navegação Principal">
+        <a href="#diagnostico" class="whitespace-nowrap hover:text-white transition-colors">Raio-X de Apps</a>
+        <a href="#simulador" class="whitespace-nowrap hover:text-white transition-colors">Simulador</a>
+        <a href="#engenharia" class="whitespace-nowrap hover:text-white transition-colors">Código & Segurança</a>
+        <a href="https://github.com/NeyvanSantos/desinstalador-android" target="_blank" rel="noopener noreferrer" class="whitespace-nowrap hover:text-white transition-colors flex items-center gap-1 normal-case font-medium" aria-label="Repositório no GitHub (abre em nova aba)">
           <span>GitHub</span>
           <svg class="w-3.5 h-3.5 opacity-70" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -165,18 +164,19 @@
       </nav>
 
       <div class="flex items-center gap-2.5">
-        <button onclick="toggleQrModal()" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg font-medium text-xs bg-card hover:bg-cardHover text-slate-200 border border-border transition-all active:scale-[0.97]" aria-label="Abrir QR Code para celular" aria-haspopup="dialog">
+        <button onclick="toggleQrModal()" class="hidden lg:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg font-medium text-xs whitespace-nowrap bg-card hover:bg-cardHover text-slate-200 border border-border transition-all active:scale-[0.97]" aria-label="QR Celular — abrir código para escanear" aria-haspopup="dialog">
           <svg class="w-3.5 h-3.5 text-brand" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
           </svg>
           <span>QR Celular</span>
         </button>
 
-        <a href="https://drive.usercontent.google.com/download?id=1A3_Tfgt3e6aMz2w-SveTy4DrbQICUGoy&export=download&confirm=t" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-xs tracking-wide uppercase bg-brand hover:bg-brandHover text-black transition-all active:scale-[0.97] shadow-sm">
+        <a href="https://drive.usercontent.google.com/download?id=1A3_Tfgt3e6aMz2w-SveTy4DrbQICUGoy&export=download&confirm=t" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-xs tracking-wide uppercase whitespace-nowrap bg-brand hover:bg-brandHover text-black transition-all active:scale-[0.97] shadow-sm">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
           </svg>
-          Baixar APK (1.13 MB)
+          <span>Baixar APK</span>
+          <span class="hidden xl:inline tabular-nums">(1.13 MB)</span>
         </a>
       </div>
     </div>
@@ -187,9 +187,9 @@
     <section class="max-w-5xl mx-auto px-6 pt-14 sm:pt-20 pb-16 text-center">
       
       <!-- Chip Monospaçado de Engenharia -->
-      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-card/90 border border-border text-[11px] font-mono text-muted mb-8 shadow-sm">
+      <div class="inline-flex flex-wrap items-center justify-center max-w-full gap-2 px-3.5 py-1.5 rounded-full bg-card/90 border border-border text-[11px] font-mono text-muted mb-8 shadow-sm">
         <span class="w-2 h-2 rounded-full bg-brand animate-pulse" aria-hidden="true"></span>
-        <span class="text-slate-200">KOTLIN 1.9</span>
+        <span class="text-slate-200">KOTLIN 2.0.21</span>
         <span class="text-borderLight" aria-hidden="true">•</span>
         <span class="text-slate-200">JETPACK COMPOSE</span>
         <span class="text-borderLight" aria-hidden="true">•</span>
@@ -455,75 +455,122 @@
         <div class="glass-card rounded-2xl overflow-hidden border border-border shadow-2xl">
           
           <!-- Abas de Código -->
-          <div class="flex border-b border-border bg-card/80 px-4 pt-3 gap-2 overflow-x-auto text-xs font-mono">
-            <button onclick="showCodeTab('service')" id="tab-btn-service" class="px-3.5 py-2 rounded-t-lg border-b-2 border-brand text-brand font-semibold transition-all">
-              BatchUninstallService.kt
+          <div role="tablist" aria-label="Arquivos reais do projeto" class="flex border-b border-border bg-card/80 px-4 pt-3 gap-2 overflow-x-auto text-xs font-mono">
+            <button onclick="showCodeTab('service')" id="tab-btn-service" role="tab" aria-selected="true" aria-controls="code-content-service" tabindex="0" class="px-3.5 py-2 rounded-t-lg border-b-2 border-brand text-brand font-semibold transition-all">
+              AutoUninstallAccessibilityService.kt
             </button>
-            <button onclick="showCodeTab('manifest')" id="tab-btn-manifest" class="px-3.5 py-2 rounded-t-lg border-b-2 border-transparent text-muted hover:text-white transition-all">
+            <button onclick="showCodeTab('manifest')" id="tab-btn-manifest" role="tab" aria-selected="false" aria-controls="code-content-manifest" tabindex="-1" class="px-3.5 py-2 rounded-t-lg border-b-2 border-transparent text-muted hover:text-white transition-all">
               AndroidManifest.xml
             </button>
-            <button onclick="showCodeTab('whitelist')" id="tab-btn-whitelist" class="px-3.5 py-2 rounded-t-lg border-b-2 border-transparent text-muted hover:text-white transition-all">
-              SystemProtectionWhitelist.kt
+            <button onclick="showCodeTab('whitelist')" id="tab-btn-whitelist" role="tab" aria-selected="false" aria-controls="code-content-whitelist" tabindex="-1" class="px-3.5 py-2 rounded-t-lg border-b-2 border-transparent text-muted hover:text-white transition-all">
+              AppRepository.kt
             </button>
           </div>
 
-          <!-- Bloco 1: BatchUninstallService.kt -->
-          <div id="code-content-service" class="p-6 font-mono text-xs text-slate-300 overflow-x-auto bg-[#070A11] leading-relaxed">
-            <pre><span class="text-purple-400">class</span> <span class="text-yellow-300">BatchUninstallService</span> : <span class="text-cyan-400">AccessibilityService</span>() {
+          <!-- Bloco 1: AutoUninstallAccessibilityService.kt (trecho real do repositório) -->
+          <div id="code-content-service" role="tabpanel" aria-labelledby="tab-btn-service" tabindex="0" class="p-6 font-mono text-xs text-slate-300 overflow-x-auto bg-[#070A11] leading-relaxed">
+            <pre><span class="text-purple-400">class</span> <span class="text-yellow-300">AutoUninstallAccessibilityService</span> : <span class="text-cyan-400">AccessibilityService</span>() {
 
-    <span class="text-subtle">// Timeout de segurança (Fail-Closed): desativa se a fila for pausada</span>
-    <span class="text-purple-400">private val</span> watchdogTimer = <span class="text-cyan-400">Timeout</span>(seconds = <span class="text-brand">15</span>)
+    <span class="text-purple-400">override fun</span> <span class="text-blue-400">onAccessibilityEvent</span>(event: <span class="text-cyan-400">AccessibilityEvent</span>?) {
+        <span class="text-subtle">// Fail-Closed: fora da janela de 15 s, nenhum clique é executado</span>
+        <span class="text-purple-400">if</span> (!isAutomationActive()) <span class="text-purple-400">return</span>
+        <span class="text-purple-400">if</span> (event == <span class="text-purple-400">null</span>) <span class="text-purple-400">return</span>
 
-    <span class="text-purple-400">override fun</span> <span class="text-blue-400">onAccessibilityEvent</span>(event: <span class="text-cyan-400">AccessibilityEvent</span>) {
-        <span class="text-subtle">// Proteção anti-tapjacking: rejeita cliques obscuros</span>
-        <span class="text-purple-400">if</span> (event.isObscured) <span class="text-purple-400">return</span>
+        <span class="text-subtle">// Allowlist: só reage a instaladores oficiais verificados</span>
+        <span class="text-purple-400">val</span> eventPackage = event.packageName?.toString() ?: <span class="text-emerald-300">""</span>
+        <span class="text-purple-400">if</span> (eventPackage.isNotEmpty() &amp;&amp; eventPackage <span class="text-purple-400">!in</span> ALLOWED_PACKAGE_INSTALLERS) <span class="text-purple-400">return</span>
 
-        <span class="text-subtle">// Localiza o botão nativo de confirmação ("OK" ou "Desinstalar")</span>
-        <span class="text-purple-400">val</span> confirmBtn = rootInActiveWindow?.findAccessibilityNodeInfosByViewId(
-            <span class="text-emerald-300">"android:id/button1"</span>
-        )?.firstOrNull()
+        <span class="text-purple-400">val</span> root = rootInActiveWindow ?: <span class="text-purple-400">return</span>
+        <span class="text-purple-400">if</span> (clickConfirmButton(root)) {
+            armAutomation() <span class="text-subtle">// renova o prazo para o próximo app da fila</span>
+        }
+    }
 
-        confirmBtn?.performAction(<span class="text-cyan-400">AccessibilityNodeInfo</span>.ACTION_CLICK)
-        watchdogTimer.reset()
+    <span class="text-purple-400">companion object</span> {
+        <span class="text-purple-400">private const val</span> DEFAULT_TIMEOUT_MS = <span class="text-brand">15_000L</span>
+        <span class="text-purple-400">private var</span> automationDeadlineMs: <span class="text-cyan-400">Long</span> = <span class="text-brand">0L</span>
+
+        <span class="text-purple-400">private val</span> ALLOWED_PACKAGE_INSTALLERS = <span class="text-cyan-400">setOf</span>(
+            <span class="text-emerald-300">"com.google.android.packageinstaller"</span>,
+            <span class="text-emerald-300">"com.android.packageinstaller"</span>,
+            <span class="text-emerald-300">"com.miui.packageinstaller"</span>,
+            <span class="text-emerald-300">"com.samsung.android.packageinstaller"</span>
+        )
+
+        <span class="text-amber-300">@Synchronized</span>
+        <span class="text-purple-400">fun</span> <span class="text-blue-400">armAutomation</span>(timeoutMs: <span class="text-cyan-400">Long</span> = DEFAULT_TIMEOUT_MS) {
+            automationDeadlineMs = SystemClock.elapsedRealtime() + timeoutMs
+        }
     }
 }</pre>
           </div>
 
-          <!-- Bloco 2: AndroidManifest.xml -->
-          <div id="code-content-manifest" class="hidden p-6 font-mono text-xs text-slate-300 overflow-x-auto bg-[#070A11] leading-relaxed">
+          <!-- Bloco 2: AndroidManifest.xml (trecho real do repositório) -->
+          <div id="code-content-manifest" role="tabpanel" aria-labelledby="tab-btn-manifest" tabindex="0" class="hidden p-6 font-mono text-xs text-slate-300 overflow-x-auto bg-[#070A11] leading-relaxed">
             <pre><span class="text-cyan-400">&lt;manifest</span> <span class="text-purple-400">xmlns:android</span>=<span class="text-emerald-300">"http://schemas.android.com/apk/res/android"</span><span class="text-cyan-400">&gt;</span>
 
-    <span class="text-subtle">&lt;!-- NOTA DE SEGURANÇA: Zero permissão de INTERNET declarada. --&gt;</span>
-    <span class="text-subtle">&lt;!-- O aplicativo é fisicamente incapaz de emitir dados para fora. --&gt;</span>
-    <span class="text-rose-400">&lt;!-- &lt;uses-permission android:name="android.permission.INTERNET" /&gt; [BLOQUEADO] --&gt;</span>
+    <span class="text-subtle">&lt;!-- Sem android.permission.INTERNET: o app é incapaz de enviar dados --&gt;</span>
+    <span class="text-cyan-400">&lt;uses-permission</span> <span class="text-purple-400">android:name</span>=<span class="text-emerald-300">"android.permission.REQUEST_DELETE_PACKAGES"</span> <span class="text-cyan-400">/&gt;</span>
+    <span class="text-cyan-400">&lt;uses-permission</span> <span class="text-purple-400">android:name</span>=<span class="text-emerald-300">"android.permission.QUERY_ALL_PACKAGES"</span> <span class="text-cyan-400">/&gt;</span>
 
     <span class="text-cyan-400">&lt;application</span>
         <span class="text-purple-400">android:allowBackup</span>=<span class="text-emerald-300">"false"</span>
-        <span class="text-purple-400">android:filterTouchesWhenObscured</span>=<span class="text-emerald-300">"true"</span><span class="text-cyan-400">&gt;</span>
-        
+        <span class="text-purple-400">android:label</span>=<span class="text-emerald-300">"@string/app_name"</span><span class="text-cyan-400">&gt;</span>
+
         <span class="text-cyan-400">&lt;service</span>
-            <span class="text-purple-400">android:name</span>=<span class="text-emerald-300">".accessibility.BatchUninstallService"</span>
+            <span class="text-purple-400">android:name</span>=<span class="text-emerald-300">".accessibility.AutoUninstallAccessibilityService"</span>
             <span class="text-purple-400">android:permission</span>=<span class="text-emerald-300">"android.permission.BIND_ACCESSIBILITY_SERVICE"</span>
-            <span class="text-purple-400">android:exported</span>=<span class="text-emerald-300">"false"</span> <span class="text-cyan-400">/&gt;</span>
+            <span class="text-purple-400">android:label</span>=<span class="text-emerald-300">"@string/accessibility_service_name"</span>
+            <span class="text-purple-400">android:exported</span>=<span class="text-emerald-300">"true"</span><span class="text-cyan-400">&gt;</span>
+            <span class="text-cyan-400">&lt;intent-filter&gt;</span>
+                <span class="text-cyan-400">&lt;action</span> <span class="text-purple-400">android:name</span>=<span class="text-emerald-300">"android.accessibilityservice.AccessibilityService"</span> <span class="text-cyan-400">/&gt;</span>
+            <span class="text-cyan-400">&lt;/intent-filter&gt;</span>
+            <span class="text-cyan-400">&lt;meta-data</span>
+                <span class="text-purple-400">android:name</span>=<span class="text-emerald-300">"android.accessibilityservice"</span>
+                <span class="text-purple-400">android:resource</span>=<span class="text-emerald-300">"@xml/accessibility_service_config"</span> <span class="text-cyan-400">/&gt;</span>
+        <span class="text-cyan-400">&lt;/service&gt;</span>
     <span class="text-cyan-400">&lt;/application&gt;</span>
 <span class="text-cyan-400">&lt;/manifest&gt;</span></pre>
           </div>
 
-          <!-- Bloco 3: WhitelistSecurity.kt -->
-          <div id="code-content-whitelist" class="hidden p-6 font-mono text-xs text-slate-300 overflow-x-auto bg-[#070A11] leading-relaxed">
-            <pre><span class="text-purple-400">object</span> <span class="text-yellow-300">SystemProtectionWhitelist</span> {
-    <span class="text-subtle">// Pacotes que NUNCA podem ser desinstalados para evitar brick</span>
-    <span class="text-purple-400">val</span> PROTECTED_PACKAGES = <span class="text-cyan-400">setOf</span>(
-        <span class="text-emerald-300">"com.android.vending"</span>,          <span class="text-subtle">// Google Play Store</span>
-        <span class="text-emerald-300">"com.google.android.webview"</span>,  <span class="text-subtle">// Android System WebView</span>
-        <span class="text-emerald-300">"com.android.settings"</span>,        <span class="text-subtle">// Ajustes do Sistema</span>
-        <span class="text-emerald-300">"com.miui.home"</span>,               <span class="text-subtle">// Launcher Xiaomi</span>
-        <span class="text-emerald-300">"com.sec.android.app.launcher"</span> <span class="text-subtle">// Launcher Samsung One UI</span>
+          <!-- Bloco 3: AppRepository.kt (whitelist real de pacotes críticos) -->
+          <div id="code-content-whitelist" role="tabpanel" aria-labelledby="tab-btn-whitelist" tabindex="0" class="hidden p-6 font-mono text-xs text-slate-300 overflow-x-auto bg-[#070A11] leading-relaxed">
+            <pre><span class="text-purple-400">class</span> <span class="text-yellow-300">AppRepository</span>(<span class="text-purple-400">private val</span> context: <span class="text-cyan-400">Context</span>) {
+
+    <span class="text-subtle">// Lista de proteção de integridade do sistema (Hardening de Segurança)</span>
+    <span class="text-purple-400">private val</span> criticalSystemPackages = <span class="text-cyan-400">setOf</span>(
+        <span class="text-subtle">// Core OS &amp; Telecom</span>
+        <span class="text-emerald-300">"android"</span>,
+        <span class="text-emerald-300">"com.android.systemui"</span>,
+        <span class="text-emerald-300">"com.android.settings"</span>,
+        <span class="text-emerald-300">"com.android.phone"</span>,
+        <span class="text-emerald-300">"com.android.server.telecom"</span>,
+        <span class="text-emerald-300">"com.android.keyguard"</span>,
+
+        <span class="text-subtle">// Package Installers oficiais</span>
+        <span class="text-emerald-300">"com.google.android.packageinstaller"</span>,
+        <span class="text-emerald-300">"com.android.packageinstaller"</span>,
+        <span class="text-emerald-300">"com.miui.packageinstaller"</span>,
+        <span class="text-emerald-300">"com.samsung.android.packageinstaller"</span>,
+
+        <span class="text-subtle">// Google Core Framework &amp; Play Services</span>
+        <span class="text-emerald-300">"com.google.android.gms"</span>,
+        <span class="text-emerald-300">"com.google.android.gsf"</span>,
+        <span class="text-emerald-300">"com.android.vending"</span>,
+
+        <span class="text-subtle">// WebViews essenciais</span>
+        <span class="text-emerald-300">"com.google.android.webview"</span>,
+        <span class="text-emerald-300">"com.android.webview"</span>,
+
+        <span class="text-subtle">// Launchers e módulos de segurança de fabricantes</span>
+        <span class="text-emerald-300">"com.miui.home"</span>,
+        <span class="text-emerald-300">"com.miui.securitycenter"</span>,
+        <span class="text-emerald-300">"com.google.android.apps.nexuslauncher"</span>,
+        <span class="text-emerald-300">"com.android.launcher3"</span>,
+        <span class="text-emerald-300">"com.sec.android.app.launcher"</span>
     )
 
-    <span class="text-purple-400">fun</span> <span class="text-blue-400">isSafeToUninstall</span>(packageName: <span class="text-cyan-400">String</span>): <span class="text-cyan-400">Boolean</span> {
-        <span class="text-purple-400">return</span> packageName <span class="text-purple-400">!in</span> PROTECTED_PACKAGES
-    }
+    <span class="text-subtle">// loadInstalledApps() descarta estes pacotes antes de montar a lista</span>
 }</pre>
           </div>
 
@@ -632,7 +679,7 @@
               </svg>
               Download Direto do APK
             </a>
-            <button onclick="toggleQrModal()" class="sm:w-auto inline-flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl font-medium text-sm glass-card text-slate-200 transition-all active:scale-[0.97]" aria-label="Escanear com a câmera do celular" aria-haspopup="dialog">
+            <button onclick="toggleQrModal()" class="sm:w-auto inline-flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl font-medium text-sm glass-card text-slate-200 transition-all active:scale-[0.97]" aria-label="QR Celular — escanear com a câmera" aria-haspopup="dialog">
               <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
               </svg>
@@ -697,7 +744,7 @@
   </main>
 
   <!-- Modal Interativo de QR Code (WCAG 2.2 AA) -->
-  <div id="qr-modal" role="dialog" aria-modal="true" aria-labelledby="qr-modal-title" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4 transition-opacity">
+  <div id="qr-modal" role="dialog" aria-modal="true" aria-labelledby="qr-modal-title" aria-describedby="qr-modal-desc" tabindex="-1" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4 transition-opacity">
     <div class="glass-card rounded-2xl max-w-sm w-full p-6 text-center shadow-2xl relative">
       <button onclick="toggleQrModal()" class="absolute top-4 right-4 text-muted hover:text-white p-1 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand" aria-label="Fechar janela modal">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
@@ -712,7 +759,7 @@
       </div>
 
       <h3 id="qr-modal-title" class="text-lg font-bold text-white">Escanear no Celular</h3>
-      <p class="text-xs text-muted mt-1 mb-4">Aponte a câmera do seu Android para fazer o download direto:</p>
+      <p id="qr-modal-desc" class="text-xs text-muted mt-1 mb-4">Aponte a câmera do seu Android para fazer o download direto:</p>
 
       <div class="bg-white p-3 rounded-xl inline-block mx-auto mb-4 shadow-md">
         <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Fdesinstalador-android.vercel.app&color=04060A" alt="QR Code para Download do Desinstalador" width="180" height="180" class="block" loading="lazy">
@@ -722,6 +769,10 @@
         <span>URL:</span>
         <code class="text-brand bg-card px-2 py-0.5 rounded border border-border font-mono">desinstalador-android.vercel.app</code>
       </div>
+
+      <a href="https://drive.usercontent.google.com/download?id=1A3_Tfgt3e6aMz2w-SveTy4DrbQICUGoy&export=download&confirm=t" class="mt-4 inline-flex w-full items-center justify-center gap-2 py-2.5 rounded-lg font-semibold text-xs bg-brand hover:bg-brandHover text-black transition-all active:scale-[0.97]">
+        Baixar APK direto (1.13 MB)
+      </a>
     </div>
   </div>
 
@@ -733,10 +784,12 @@
         <span aria-hidden="true">•</span>
         <span>Desenvolvido por Neyvan Santos</span>
       </div>
-      <div class="flex gap-6">
+      <div class="flex flex-wrap justify-center gap-x-6 gap-y-2">
         <a href="#diagnostico" class="hover:text-white transition-colors">Diagnóstico</a>
         <a href="#simulador" class="hover:text-white transition-colors">Simulador</a>
+        <a href="#comparativo" class="hover:text-white transition-colors">Comparativo</a>
         <a href="#engenharia" class="hover:text-white transition-colors">Código & Segurança</a>
+        <a href="#faq" class="hover:text-white transition-colors">Dúvidas</a>
         <a href="https://github.com/NeyvanSantos/desinstalador-android" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">GitHub</a>
       </div>
     </div>
@@ -876,18 +929,34 @@
       }
     }
 
-    // 2. Abas de Código da Engenharia
+    // 2. Abas de Código da Engenharia (padrão WAI-ARIA de tabs)
     function showCodeTab(tabKey) {
       ['service', 'manifest', 'whitelist'].forEach(key => {
         const btn = document.getElementById(`tab-btn-${key}`);
         const content = document.getElementById(`code-content-${key}`);
-        if (key === tabKey) {
-          btn.className = 'px-3.5 py-2 rounded-t-lg border-b-2 border-brand text-brand font-semibold transition-all';
-          content.classList.remove('hidden');
-        } else {
-          btn.className = 'px-3.5 py-2 rounded-t-lg border-b-2 border-transparent text-muted hover:text-white transition-all';
-          content.classList.add('hidden');
-        }
+        const selected = key === tabKey;
+        btn.className = selected
+          ? 'px-3.5 py-2 rounded-t-lg border-b-2 border-brand text-brand font-semibold transition-all'
+          : 'px-3.5 py-2 rounded-t-lg border-b-2 border-transparent text-muted hover:text-white transition-all';
+        btn.setAttribute('aria-selected', selected ? 'true' : 'false');
+        btn.tabIndex = selected ? 0 : -1;
+        content.classList.toggle('hidden', !selected);
+      });
+    }
+
+    function setupCodeTabsKeyboard() {
+      const tablist = document.querySelector('[role="tablist"][aria-label="Arquivos reais do projeto"]');
+      if (!tablist) return;
+      tablist.addEventListener('keydown', (event) => {
+        if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+        const tabs = [...tablist.querySelectorAll('[role="tab"]')];
+        const current = tabs.indexOf(document.activeElement);
+        if (current === -1) return;
+        event.preventDefault();
+        const step = event.key === 'ArrowRight' ? 1 : -1;
+        const next = tabs[(current + step + tabs.length) % tabs.length];
+        showCodeTab(next.id.replace('tab-btn-', ''));
+        next.focus();
       });
     }
 
@@ -919,22 +988,34 @@
       if (barFast) barFast.style.width = `${Math.min(15, Math.max(3, (appSecs / manualSecs) * 100))}%`;
     }
 
-    // 4. Modal QR Code Acessível
+    // 4. Modal QR Code Acessível (foco contido e restaurado)
+    let qrModalOpener = null;
+
+    function getQrFocusableElements(modal) {
+      return [...modal.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])')]
+        .filter(el => el.getClientRects().length > 0);
+    }
+
     function toggleQrModal() {
       const modal = document.getElementById('qr-modal');
-      if (modal) {
-        const isHidden = modal.classList.contains('hidden');
-        if (isHidden) {
-          modal.classList.remove('hidden');
-          modal.classList.add('flex');
-          document.body.style.overflow = 'hidden';
-          const closeBtn = modal.querySelector('button');
-          if (closeBtn) closeBtn.focus();
-        } else {
-          modal.classList.remove('flex');
-          modal.classList.add('hidden');
-          document.body.style.overflow = '';
+      if (!modal) return;
+      const isHidden = modal.classList.contains('hidden');
+
+      if (isHidden) {
+        qrModalOpener = document.activeElement;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+        const focusables = getQrFocusableElements(modal);
+        (focusables[0] || modal).focus();
+      } else {
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+        if (qrModalOpener && typeof qrModalOpener.focus === 'function') {
+          qrModalOpener.focus();
         }
+        qrModalOpener = null;
       }
     }
 
@@ -944,15 +1025,42 @@
     });
 
     window.addEventListener('keydown', (e) => {
+      const modal = document.getElementById('qr-modal');
+      if (!modal || modal.classList.contains('hidden')) return;
+
       if (e.key === 'Escape') {
-        const modal = document.getElementById('qr-modal');
-        if (modal && !modal.classList.contains('hidden')) toggleQrModal();
+        e.preventDefault();
+        toggleQrModal();
+        return;
+      }
+
+      if (e.key === 'Tab') {
+        const focusables = getQrFocusableElements(modal);
+        if (focusables.length === 0) {
+          e.preventDefault();
+          modal.focus();
+          return;
+        }
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        } else if (!modal.contains(document.activeElement)) {
+          e.preventDefault();
+          first.focus();
+        }
       }
     });
 
     // Inicialização ao carregar
     document.addEventListener("DOMContentLoaded", () => {
       renderOemApps();
+      setupCodeTabsKeyboard();
     });
   </script>
 

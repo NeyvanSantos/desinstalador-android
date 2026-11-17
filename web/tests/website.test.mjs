@@ -2,8 +2,11 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const htmlPath = path.resolve('g:/Desinstalador de Android/web/index.html');
+// Resolução de caminho relativo portátil para CI/CD (sem caminhos absolutos hardcoded)
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const htmlPath = path.resolve(__dirname, '../index.html');
 const html = fs.readFileSync(htmlPath, 'utf8');
 
 test('1. [Semântica HTML5] Estrutura hierárquica e tags semânticas completas', () => {
@@ -56,5 +59,35 @@ test('8. [Design Distinto - Storage Breakdown Gauge] Régua visual de armazename
 });
 
 test('9. [Design Distinto - Inspetor de Engenharia & Código Real] Trechos Kotlin/Compose', () => {
-  assert.ok(html.includes('BatchUninstallService') || html.includes('AccessibilityService'), 'Deve exibir a engenharia real com trecho de código auditável');
+  assert.ok(html.includes('AutoUninstallAccessibilityService') || html.includes('AccessibilityService'), 'Deve exibir a engenharia real com trecho de código auditável');
+});
+
+test('10. [Código Real] Painel exibe apenas classes e arquivos que existem no repositório', () => {
+  assert.ok(html.includes('AutoUninstallAccessibilityService.kt'), 'Painel deve citar o serviço real de acessibilidade');
+  assert.ok(html.includes('AppRepository.kt'), 'Painel deve citar o repositório real');
+  assert.ok(!html.includes('BatchUninstallService'), 'Não deve citar a classe fictícia BatchUninstallService');
+  assert.ok(!html.includes('SystemProtectionWhitelist'), 'Não deve citar a classe fictícia SystemProtectionWhitelist');
+  assert.ok(!html.includes('event.isObscured'), 'Não deve inventar a API inexistente event.isObscured');
+  assert.ok(html.includes('criticalSystemPackages'), 'Whitelist real deve aparecer no código');
+  assert.ok(html.includes('DEFAULT_TIMEOUT_MS'), 'Timeout real de 15 s deve aparecer no código');
+});
+
+test('11. [Consistência de Build] Badge Kotlin 2.0.21 e favicon embutido', () => {
+  assert.ok(html.includes('KOTLIN 2.0.21'), 'Badge deve refletir a versão real do Kotlin');
+  assert.ok(!html.includes('KOTLIN 1.9'), 'Badge não deve exibir versão antiga');
+  assert.ok(html.includes('rel="icon"'), 'Página deve declarar favicon para evitar 404');
+});
+
+test('12. [Acessibilidade WCAG] Abas de código com semântica ARIA', () => {
+  assert.ok(html.includes('role="tablist"'), 'Abas devem ter tablist');
+  assert.ok(html.includes('role="tab"'), 'Botões devem ter role tab');
+  assert.ok(html.includes('aria-controls="code-content-service"'), 'Aba deve apontar para o painel correspondente');
+  assert.ok(html.includes('role="tabpanel"'), 'Painéis devem ter role tabpanel');
+});
+
+test('13. [Acessibilidade WCAG 2.4.3] Foco contido e restaurado no modal', () => {
+  assert.ok(html.includes('qrModalOpener'), 'Modal deve guardar o elemento que o abriu');
+  assert.ok(html.includes("e.key === 'Tab'"), 'Modal deve interceptar Tab');
+  assert.ok(html.includes('getQrFocusableElements'), 'Modal deve calcular os elementos focáveis');
+  assert.ok(html.includes('aria-describedby="qr-modal-desc"'), 'Diálogo deve descrever seu conteúdo');
 });
