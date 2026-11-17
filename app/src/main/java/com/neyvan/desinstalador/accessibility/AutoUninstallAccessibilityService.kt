@@ -4,149 +4,146 @@ import android.accessibilityservice.AccessibilityService
 import android.os.SystemClock
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import java.util.ArrayDeque
 
 class AutoUninstallAccessibilityService : AccessibilityService() {
 
     override fun onServiceConnected() {
         super.onServiceConnected()
-        instance = this
-        _isRunning.value = true
+        disarmAutomation()
+        serviceAvailability.connected(this)
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
-        // Princípio Fail-Closed: se a automação não estiver ativada ou tiver expirado, aborta imediatamente
-        if (!isAutomationActive()) return
-        if (event == null) return
-
-        // Validação estrita de segurança: só processa janelas de instaladores oficiais verificados
-        val eventPackage = event.packageName?.toString() ?: ""
-        if (eventPackage.isNotEmpty() && eventPackage !in ALLOWED_PACKAGE_INSTALLERS) {
+        val now = SystemClock.uptimeMillis()
+        if (event == null) {
+            disarmAutomation()
+            return
+        }
+        val target = automationGate.activeTarget(now) ?: return
+        if (!automationGate.isEventAfterArm(target.operationId, event.eventTime)) return
+        if (event.eventType != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED &&
+            event.eventType != AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
+        ) {
             return
         }
 
-        val root = rootInActiveWindow ?: return
-        val rootPackage = root.packageName?.toString() ?: ""
-        if (rootPackage.isNotEmpty() && rootPackage !in ALLOWED_PACKAGE_INSTALLERS) {
+        val eventPackage = event.packageName?.toString().orEmpty()
+        if (!InstallerPackages.isAllowed(eventPackage)) {
+            if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
+                disarmAutomation(target.operationId)
+            }
             return
         }
 
-        val clicked = clickConfirmButton(root)
-        if (clicked) {
-            // Renova o tempo de tolerância para o próximo app da fila
-            armAutomation()
+        val root = rootInActiveWindow
+        val rootPackage = root?.packageName?.toString()
+        val activeRoot = root?.takeIf {
+            rootPackage == eventPackage &&
+                InstallerPackages.isAllowed(eventPackage) &&
+                it.windowId == event.windowId &&
+                it.isVisibleToUser
+        }
+        val relevantNodes = activeRoot
+            ?.let(::collectNodes)
+            .orEmpty()
+            .filter { node -> node.isVisibleToUser && node.windowId == activeRoot?.windowId }
+        val evidence = relevantNodes.flatMap { node ->
+            listOfNotNull(node.text?.toString(), node.contentDescription?.toString())
+                .map { text ->
+                    AccessibilityTextEvidence(
+                        text = text,
+                        isVisibleToUser = node.isVisibleToUser,
+                        windowId = node.windowId
+                    )
+                }
+        }
+        val visibleTexts = relevantVisibleTexts(evidence, activeRoot?.windowId ?: event.windowId)
+        val uninstallTextMatches = UninstallDialogMatcher.isUninstallConfirmation(visibleTexts)
+        val targetMatches = UninstallDialogMatcher.matchesExpectedApp(
+            target.packageName,
+            target.appLabel,
+            visibleTexts
+        )
+        val actionNodes = relevantNodes.filter { node ->
+            UninstallDialogMatcher.isPositiveAction(
+                buttonText = node.text?.toString() ?: node.contentDescription?.toString(),
+                viewId = node.viewIdResourceName,
+                isVerifiedTargetUninstallDialog = uninstallTextMatches && targetMatches
+            )
+        }
+        val button = actionNodes.firstOrNull { node -> node.isEnabled && node.isClickable }
+
+        automationGate.consumeVerifiedObservation(
+            target = target,
+            observation = InstallerDialogObservation(
+                installerPackageName = eventPackage,
+                windowPackageName = rootPackage,
+                rootVisible = activeRoot?.isVisibleToUser == true,
+                eventWindowId = event.windowId,
+                rootWindowId = activeRoot?.windowId,
+                visibleTexts = visibleTexts,
+                hasPositiveAction = button != null
+            ),
+            nowUptimeMs = now,
+            eventTimeUptimeMs = event.eventTime
+        ) {
+            button?.performAction(AccessibilityNodeInfo.ACTION_CLICK)
         }
     }
 
-    private fun clickConfirmButton(root: AccessibilityNodeInfo): Boolean {
-        // Tenta achar botões pelo id padrão do Android para diálogos de confirmação
-        val androidButtonIds = listOf(
-            "android:id/button1", // Botão positivo (OK / Desinstalar)
-            "com.android.packageinstaller:id/ok_button",
-            "com.google.android.packageinstaller:id/ok_button",
-            "com.miui.packageinstaller:id/ok_button"
-        )
+    private fun collectNodes(root: AccessibilityNodeInfo): List<AccessibilityNodeInfo> {
+        val nodes = mutableListOf<AccessibilityNodeInfo>()
+        val pending = ArrayDeque<AccessibilityNodeInfo>()
+        pending.add(root)
 
-        for (resId in androidButtonIds) {
-            val nodes = root.findAccessibilityNodeInfosByViewId(resId)
-            for (node in nodes) {
-                if (node.isClickable && node.isEnabled) {
-                    node.performAction(AccessibilityNodeInfo.ACTION_CLICK)
-                    return true
-                }
+        while (pending.isNotEmpty() && nodes.size < MAX_ACCESSIBILITY_NODES) {
+            val node = pending.removeFirst()
+            nodes += node
+            for (index in 0 until node.childCount) {
+                node.getChild(index)?.let(pending::addLast)
             }
         }
-
-        // Tenta buscar por textos comuns em vários idiomas/formatos
-        val targetTexts = listOf(
-            "OK", "Ok", "ok",
-            "Desinstalar", "DESINSTALAR",
-            "Uninstall", "UNINSTALL"
-        )
-
-        for (text in targetTexts) {
-            val nodes = root.findAccessibilityNodeInfosByText(text)
-            for (node in nodes) {
-                if (node.isClickable && node.isEnabled) {
-                    node.performAction(AccessibilityNodeInfo.ACTION_CLICK)
-                    return true
-                }
-                // Se o próprio texto não for clicável, tenta o pai dele (caso seja um botão container)
-                val parent = node.parent
-                if (parent != null) {
-                    if (parent.isClickable && parent.isEnabled) {
-                        parent.performAction(AccessibilityNodeInfo.ACTION_CLICK)
-                        return true
-                    }
-                }
-            }
-        }
-
-        return false
+        return nodes
     }
 
     override fun onInterrupt() {
         disarmAutomation()
-        _isRunning.value = false
+        serviceAvailability.interrupted(this)
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         disarmAutomation()
-        if (instance == this) {
-            instance = null
-            _isRunning.value = false
-        }
+        serviceAvailability.destroyed(this)
+        super.onDestroy()
     }
 
     companion object {
-        // Timeout de segurança: a automação expira após 15 segundos sem nova ação para evitar execuções acidentais
         private const val DEFAULT_TIMEOUT_MS = 15_000L
-        private var automationDeadlineMs: Long = 0L
+        private const val MAX_ACCESSIBILITY_NODES = 200
+        private val automationGate = UninstallAutomationGate()
+        private val serviceAvailability = AccessibilityServiceAvailability<AutoUninstallAccessibilityService>()
+        val isRunning: StateFlow<Boolean> = serviceAvailability.isRunning
 
-        private val ALLOWED_PACKAGE_INSTALLERS = setOf(
-            "com.google.android.packageinstaller",
-            "com.android.packageinstaller",
-            "com.miui.packageinstaller",
-            "com.samsung.android.packageinstaller"
-        )
+        fun isServiceRunning(): Boolean = serviceAvailability.isRunning()
 
-        private var instance: AutoUninstallAccessibilityService? = null
+        fun armAutomation(
+            operationId: String,
+            expectedPackageName: String,
+            expectedAppLabel: String,
+            timeoutMs: Long = DEFAULT_TIMEOUT_MS
+        ): Boolean = automationGate.arm(
+                target = UninstallAutomationTarget(operationId, expectedPackageName, expectedAppLabel),
+                nowUptimeMs = SystemClock.uptimeMillis(),
+                timeoutMs = timeoutMs
+            )
 
-        private val _isRunning = MutableStateFlow(false)
-        val isRunning: StateFlow<Boolean> = _isRunning.asStateFlow()
-
-        fun isServiceRunning(): Boolean = instance != null
-
-        /**
-         * Arma a automação com uma janela de tempo de expiração segura (Princípio Fail-Closed).
-         */
-        @Synchronized
-        fun armAutomation(timeoutMs: Long = DEFAULT_TIMEOUT_MS) {
-            automationDeadlineMs = SystemClock.elapsedRealtime() + timeoutMs
+        fun disarmAutomation(operationId: String? = null) {
+            automationGate.disarm(operationId)
         }
 
-        /**
-         * Desarma imediatamente a automação, impedindo cliques posteriores.
-         */
-        @Synchronized
-        fun disarmAutomation() {
-            automationDeadlineMs = 0L
-        }
-
-        /**
-         * Verifica se a automação está ativamente armada e dentro do período de validade.
-         */
-        @Synchronized
-        fun isAutomationActive(): Boolean {
-            val now = SystemClock.elapsedRealtime()
-            val active = now <= automationDeadlineMs
-            if (!active && automationDeadlineMs != 0L) {
-                automationDeadlineMs = 0L
-            }
-            return active
-        }
+        fun isAutomationActive(): Boolean =
+            automationGate.isActive(SystemClock.uptimeMillis())
     }
 }

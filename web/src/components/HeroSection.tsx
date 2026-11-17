@@ -18,6 +18,7 @@ import {
 import {
   APP_FACTS,
   CONCEPTUAL_PHONE_APPS,
+  DOWNLOAD_AVAILABLE,
   MockupFilterTab,
   MockupSortOrder,
   OFFICIAL_DOWNLOAD_URL,
@@ -149,20 +150,28 @@ export default function HeroSection() {
             </h1>
 
             <p className="text-base sm:text-lg text-[#8E9BB0] leading-relaxed max-w-2xl mb-8">
-              Escolha os aplicativos que não usa mais, inicie a fila de remoção e deixe o serviço de acessibilidade — habilitado manualmente por você — confirmar os diálogos oficiais do instalador do Android. Sem root, sem computador e sem permissão de Internet.
+              Escolha os aplicativos que não usa mais e inicie a fila. A confirmação por acessibilidade é opcional e só ocorre quando o instalador expõe evidências suficientes; nos demais casos, confirme manualmente. Sem root, sem computador e sem permissão de Internet.
             </p>
 
             <div className="flex flex-wrap items-center gap-4">
-              <a
-                href={OFFICIAL_DOWNLOAD_URL}
-                rel="noopener noreferrer"
-                className="group btn-lift cta-glow-spin inline-flex items-center justify-center whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F59E0B]"
-              >
-                <span className="relative z-10 inline-flex items-center justify-center gap-2.5 px-[22px] py-[12px] rounded-[8px] text-base font-semibold text-[#04060A] bg-[#F59E0B] group-hover:bg-[#FBBF24] transition-colors">
-                  <ArrowDownToLine className="w-5 h-5" aria-hidden="true" />
-                  <span>Baixar APK oficial</span>
-                </span>
-              </a>
+              {DOWNLOAD_AVAILABLE ? (
+                <a
+                  href={OFFICIAL_DOWNLOAD_URL}
+                  className="group btn-lift cta-glow-spin inline-flex items-center justify-center whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F59E0B]"
+                >
+                  <span className="relative z-10 inline-flex items-center justify-center gap-2.5 px-[22px] py-[12px] rounded-[8px] text-base font-semibold text-[#04060A] bg-[#F59E0B] group-hover:bg-[#FBBF24] transition-colors">
+                    <ArrowDownToLine className="w-5 h-5" aria-hidden="true" />
+                    <span>Baixar APK oficial</span>
+                  </span>
+                </a>
+              ) : (
+                <a
+                  href="#download"
+                  className="inline-flex items-center justify-center whitespace-nowrap shrink-0 rounded-lg border border-[#1A2338] px-[22px] py-[12px] text-base font-semibold text-[#8E9BB0]"
+                >
+                  Download indisponível
+                </a>
+              )}
 
               <a
                 href="#como-funciona"

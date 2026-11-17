@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import BrandMark from './BrandMark';
-import { OFFICIAL_DOWNLOAD_URL } from '../utils/desinstalaUtils';
+import { DOWNLOAD_AVAILABLE, OFFICIAL_DOWNLOAD_URL } from '../utils/desinstalaUtils';
 
 const NAV_LINKS = [
   { href: '#como-funciona', label: 'Como funciona' },
@@ -42,15 +42,23 @@ export default function Navbar() {
 
         {/* Zone 3: Primary action + mobile toggle */}
         <div className="flex items-center gap-3 shrink-0">
-          <a
-            href={OFFICIAL_DOWNLOAD_URL}
-            rel="noopener noreferrer"
-            className="group btn-lift cta-glow-spin hidden sm:inline-flex items-center justify-center whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F59E0B]"
-          >
-            <span className="relative z-10 inline-flex items-center justify-center px-[14px] py-[6px] rounded-[6px] text-sm font-semibold text-[#04060A] bg-[#F59E0B] group-hover:bg-[#FBBF24] transition-colors">
-              Baixar APK
-            </span>
-          </a>
+          {DOWNLOAD_AVAILABLE ? (
+            <a
+              href={OFFICIAL_DOWNLOAD_URL}
+              className="group btn-lift cta-glow-spin hidden sm:inline-flex items-center justify-center whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F59E0B]"
+            >
+              <span className="relative z-10 inline-flex items-center justify-center px-[14px] py-[6px] rounded-[6px] text-sm font-semibold text-[#04060A] bg-[#F59E0B] group-hover:bg-[#FBBF24] transition-colors">
+                Baixar APK
+              </span>
+            </a>
+          ) : (
+            <a
+              href="#download"
+              className="hidden sm:inline-flex items-center justify-center whitespace-nowrap shrink-0 rounded-[6px] border border-[#1A2338] px-[14px] py-[6px] text-sm font-semibold text-[#8E9BB0]"
+            >
+              Download indisponível
+            </a>
+          )}
 
           <button
             type="button"

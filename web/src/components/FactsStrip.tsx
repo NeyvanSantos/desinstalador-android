@@ -1,4 +1,5 @@
 import { CheckCircle2, HardDrive, ShieldCheck, Smartphone, WifiOff } from 'lucide-react';
+import { APP_FACTS } from '../utils/desinstalaUtils';
 import { useScrollReveal } from '../utils/useScrollReveal';
 
 const FACT_SHORTCUTS = [
@@ -11,8 +12,8 @@ const FACT_SHORTCUTS = [
   {
     href: '#download',
     icon: HardDrive,
-    title: '1,13 MB',
-    detail: 'APK versão 1.1 leve',
+    title: `APK v${APP_FACTS.version}`,
+    detail: APP_FACTS.sizeLabel,
   },
   {
     href: '#seguranca',

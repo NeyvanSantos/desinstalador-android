@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { ArrowDownToLine, Check, Copy } from 'lucide-react';
 import {
   APP_FACTS,
+  DOWNLOAD_AVAILABLE,
   OFFICIAL_DOWNLOAD_URL,
   OFFICIAL_SITE_URL,
   generateQrMatrix,
@@ -40,7 +41,7 @@ export default function DownloadSection() {
             Baixe o APK oficial do DesinstalaJá.
           </h2>
           <p className="text-sm sm:text-base text-[#8E9BB0] leading-relaxed mt-3">
-            Arquivo único para instalação direta no Android, sem loja intermediária e sem exigência de root ou computador.
+            Versão 1.2 assinada e verificada, hospedada diretamente neste domínio.
           </p>
         </div>
 
@@ -56,7 +57,7 @@ export default function DownloadSection() {
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-xs text-[#8E9BB0]">Tamanho aprox.</dt>
+                  <dt className="text-xs text-[#8E9BB0]">Tamanho</dt>
                   <dd className="text-xl font-bold text-[#F8FAFC] font-mono tabular-nums mt-1">
                     {APP_FACTS.sizeLabel}
                   </dd>
@@ -89,17 +90,31 @@ export default function DownloadSection() {
             </div>
 
             <div className="pt-2 flex flex-wrap items-center gap-4">
-              <a
-                href={OFFICIAL_DOWNLOAD_URL}
-                rel="noopener noreferrer"
-                className="group btn-lift cta-glow-spin flex w-full items-center justify-center whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F59E0B]"
-              >
-                <span className="relative z-10 flex w-full items-center justify-center gap-2.5 px-[22px] py-[12px] rounded-[8px] text-base font-semibold text-[#04060A] bg-[#F59E0B] group-hover:bg-[#FBBF24] transition-colors">
-                  <ArrowDownToLine className="w-5 h-5" aria-hidden="true" />
-                  <span>Baixar APK oficial (v{APP_FACTS.version})</span>
-                </span>
-              </a>
-
+              {DOWNLOAD_AVAILABLE ? (
+                <a
+                  href={OFFICIAL_DOWNLOAD_URL}
+                  className="group btn-lift cta-glow-spin flex w-full items-center justify-center whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F59E0B]"
+                >
+                  <span className="relative z-10 flex w-full items-center justify-center gap-2.5 px-[22px] py-[12px] rounded-[8px] text-base font-semibold text-[#04060A] bg-[#F59E0B] group-hover:bg-[#FBBF24] transition-colors">
+                    <ArrowDownToLine className="w-5 h-5" aria-hidden="true" />
+                    <span>Baixar APK oficial (v{APP_FACTS.version})</span>
+                  </span>
+                </a>
+              ) : (
+                <button
+                  type="button"
+                  disabled
+                  aria-describedby="apk-unavailable-notice"
+                  className="flex w-full cursor-not-allowed items-center justify-center whitespace-nowrap rounded-lg border border-[#1A2338] px-[22px] py-[12px] text-base font-semibold text-[#8E9BB0]"
+                >
+                  Download temporariamente indisponível
+                </button>
+              )}
+              {!DOWNLOAD_AVAILABLE && (
+                <p id="apk-unavailable-notice" className="text-sm text-[#8E9BB0]" role="status">
+                  O download direto não está disponível no momento. Tente novamente mais tarde.
+                </p>
+              )}
             </div>
           </div>
 

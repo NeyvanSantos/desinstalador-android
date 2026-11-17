@@ -1,103 +1,105 @@
-<div align="center">
+# DesinstalaJá
 
-# 📱 Desinstalador de Android
-### Batch App Uninstaller for Android
+Aplicativo Android nativo para localizar, selecionar e solicitar a desinstalação de vários aplicativos em sequência. O app usa Kotlin, Jetpack Compose e os fluxos oficiais do Android; não exige root, ADB, Shizuku, conexão com a internet nem servidor.
 
-<p align="center">
-  <a href="https://android.com"><img src="https://img.shields.io/badge/Platform-Android_8.0+-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Platform"></a>
-  <a href="https://kotlinlang.org"><img src="https://img.shields.io/badge/Kotlin-1.9+-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white" alt="Kotlin"></a>
-  <a href="https://developer.android.com/jetpack/compose"><img src="https://img.shields.io/badge/UI-Jetpack_Compose-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white" alt="Jetpack Compose"></a>
-  <a href="https://desinstalador-android.vercel.app"><img src="https://img.shields.io/badge/Landing_Page-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Landing Page"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-amber?style=for-the-badge" alt="License"></a>
-</p>
+## Como funciona
 
-<p align="center">
-  <strong>Aplicativo nativo Android desenvolvido em Kotlin e Jetpack Compose para remoção rápida e em lote de múltiplos aplicativos com apenas 1 toque.</strong><br>
-  100% offline, sem necessidade de root, Shizuku ou computador.
-</p>
+- O usuário escolhe os aplicativos e inicia a fila.
+- O Android abre seu diálogo oficial de desinstalação para cada item; a confirmação do sistema continua sendo necessária.
+- Opcionalmente, o usuário pode ativar o serviço de acessibilidade. Após divulgação e consentimento dentro do app, o serviço só tenta tocar no botão de desinstalação quando reconhece o instalador permitido, uma evidência exata do app atual e a ação de remoção. Apps do sistema, nomes ambíguos, diálogos de atualização ou evidência insuficiente ficam para confirmação manual.
+- A fila verifica no `PackageManager` se o pacote realmente deixou de estar instalado. Se não puder confirmar, pausa e oferece tentar novamente, pular ou cancelar.
+- Apps do sistema ficam ocultos por padrão. A lista de sistema exige aviso antes de ser exibida; pacotes essenciais conhecidos permanecem protegidos. A classificação considera também as flags do Android, mas não garante que qualquer outro app seja seguro para remover.
+- O indicador de tamanho representa o tamanho dos APKs e splits, não o armazenamento total ocupado pelo app.
 
-</div>
+O serviço lê texto e botões somente da janela ativa do instalador, processa os dados localmente e não os armazena nem transmite. A fila e os identificadores dos apps selecionados são salvos em armazenamento privado para permitir recuperação após encerramento do processo, mas são excluídos de backup na nuvem e transferência entre dispositivos. O snapshot da fila é removido ao concluir ou cancelar; a seleção restante permanece até ser alterada. Não é mantido um histórico permanente de apps removidos.
 
----
+## Privacidade e distribuição independente
 
-## ⚡ Comparativo de Produtividade
+O app não declara a permissão `INTERNET` e será distribuído como APK assinado pelo site oficial, sem publicação na Google Play. `QUERY_ALL_PACKAGES` é usada para listar os apps locais; a seleção e o progresso da fila permanecem no dispositivo. A confirmação manual continua disponível quando o instalador não oferece informações suficientes à automação.
 
-| Métrica | Método Manual (Configurações do Android) | Desinstalador em Lote |
-| :--- | :--- | :--- |
-| **Tempo médio (15 apps)** | ~ 4 minutos e 20 segundos | **~ 12 segundos (95% mais rápido)** |
-| **Interações do usuário** | 30+ toques manuais em diálogos | **1 toque para confirmar a fila** |
-| **Dependência de PC** | Frequentemente exige cabo/ADB | **Zero dependência (100% no celular)** |
-| **Privacidade** | - | **100% Offline (Sem permissão de internet)** |
-
----
-
-## 🚀 Principais Recursos
-
-- **Remoção em Fila Automatizada**: Utiliza o `AccessibilityService` do Android para automatizar os cliques de confirmação ("OK" / "Desinstalar") sequencialmente.
-- **Carregamento Instantâneo**: Otimizado com leitura direta de tamanho via `File.length()` e *lazy loading* de ícones no `LazyColumn`, carregando 600+ apps em menos de 2 segundos.
-- **Blindagem de Segurança (Anti-Tapjacking)**: Implementa `filterTouchesWhenObscured = true` para bloquear sobreposições maliciosas e ataques de toque fantasma.
-- **Proteção do Sistema**: Whitelist de segurança que impede a exclusão acidental de componentes essenciais (Google Play Store, WebView, ajustes do sistema e launchers de fábrica).
-- **Auto-Desarme (Fail-Closed)**: Timeout de 15 segundos que desativa o serviço de acessibilidade se a fila for interrompida ou concluída.
-- **Compatibilidade Ampla**: Suporte oficial ao instalador nativo do Google (Pixel / AOSP), Xiaomi (MIUI / HyperOS) e Samsung (One UI).
-- **Tema Dark OLED**: Interface limpa em Material Design 3 com pretos puros para economia de bateria em telas AMOLED.
-
----
-
-## 🏗️ Arquitetura do Projeto
+## Estrutura
 
 ```text
-com.neyvan.desinstalador/
+app/src/main/java/com/neyvan/desinstalador/
 ├── accessibility/
-│   └── AutoUninstallAccessibilityService.kt  # Automação do instalador nativo com timeout
+│   ├── AccessibilityHelper.kt
+│   ├── AccessibilityServiceAvailability.kt
+│   ├── AccessibilityTextEvidence.kt
+│   ├── AutoUninstallAccessibilityService.kt
+│   └── UninstallAutomationPolicy.kt
 ├── data/
-│   ├── model/
-│   │   └── InstalledApp.kt                   # Modelo de dados de app instalado
-│   └── repository/
-│       └── AppRepository.kt                  # Varredura do PackageManager e lista protegida
+│   ├── AppRepository.kt
+│   ├── InstalledApp.kt
+│   └── InstalledAppCategory.kt
 ├── ui/
-│   ├── theme/                               # Cores, Dark Theme OLED e tipografia
-│   ├── components/                           # Componentes reutilizáveis
-│   ├── AppListScreen.kt                      # Tela principal com filtros e ordenação
-│   └── MainViewModel.kt                      # ViewModel reativa com StateFlow
-└── MainActivity.kt                           # Ponto de entrada com filtro anti-tapjacking
+│   ├── UninstallerScreen.kt
+│   ├── UninstallerViewModel.kt
+│   ├── UninstallQueueState.kt
+│   ├── UninstallQueueOperationCoordinator.kt
+│   └── UninstallQueueStore.kt
+└── MainActivity.kt
 ```
 
----
+## Compilação e testes (Windows / PowerShell)
 
-## 🌐 Landing Page & Download
+Pré-requisitos: Android Studio, Android SDK 35 e JDK 17.
 
-O projeto conta com uma landing page oficial hospedada na Vercel com design minimalista e animações fluidas via GSAP 3:
-
-👉 **[desinstalador-android.vercel.app](https://desinstalador-android.vercel.app)**
-
-O APK de produção foi minificado com **ProGuard / R8**, reduzindo o tamanho de **20.5 MB** para apenas **1.13 MB**.
-
----
-
-## 🛠️ Como Compilar o Projeto
-
-### Pré-requisitos
-- Android Studio Ladybug ou superior
-- JDK 17
-- Android SDK 35 (Android 15)
-
-### Build via Gradle
-```bash
-# Clonar o repositório
-git clone https://github.com/NeyvanSantos/desinstalador-android.git
-cd desinstalador-android
-
-# Compilar versão Debug
-./gradlew assembleDebug
-
-# Compilar versão Release Otimizada (R8)
-./gradlew assembleRelease
+```powershell
+.\gradlew.bat :app:testDebugUnitTest
+.\gradlew.bat :app:lintDebug
+.\gradlew.bat :app:assembleDebug
+.\gradlew.bat :app:assembleRelease
 ```
 
----
+## Assinatura Release
 
-## 📄 Licença
+O Release usa uma chave própria de produção e nunca usa a chave Debug. **Não gere uma chave automaticamente.** A criação deve ser autorizada pelo responsável e feita uma única vez, em um local protegido fora do repositório. Exemplo do comando a executar manualmente após autorização:
 
-Distribuído sob a licença MIT. Veja `LICENSE` para mais informações.
+```powershell
+keytool -genkeypair -v `
+  -keystore "C:\caminho-seguro\desinstalaja-release.jks" `
+  -alias desinstalaja-prod `
+  -keyalg RSA -keysize 4096 -validity 10000
+```
 
-Desenvolvido por **[Neyvan Santos](https://github.com/NeyvanSantos)**.
+Guarde pelo menos duas cópias de backup criptografadas em mídias/localizações independentes. Mantenha senhas em um gerenciador seguro, registre o fingerprint SHA-256 do certificado e teste a restauração do backup. A mesma keystore, alias e senha devem ser preservados para todas as atualizações; perder a chave impede assinar uma atualização compatível para os usuários existentes.
+
+Configure os quatro valores em variáveis de ambiente (`RELEASE_STORE_FILE`, `RELEASE_STORE_PASSWORD`, `RELEASE_KEY_ALIAS`, `RELEASE_KEY_PASSWORD`) ou em um arquivo local `keystore.properties` ignorado pelo Git:
+
+```properties
+storeFile=C:/caminho-seguro/desinstalaja-release.jks
+storePassword=...
+keyAlias=desinstalaja-prod
+keyPassword=...
+```
+
+Não coloque o arquivo de chave, senhas ou chaves privadas no repositório. A configuração atual usa a chave apenas quando os quatro valores estão preenchidos. Sem eles, `assembleRelease` pode compilar um APK **não assinado**, que serve somente para validação local e nunca deve ser copiado para o site.
+
+Compile e verifique a assinatura usando o `apksigner` do Android SDK Build Tools:
+
+```powershell
+.\gradlew.bat :app:assembleRelease
+& "$env:ANDROID_SDK_ROOT\build-tools\<versão>\apksigner.bat" verify --verbose --print-certs `
+  .\app\build\outputs\apk\release\app-release.apk
+Get-FileHash .\app\build\outputs\apk\release\app-release.apk -Algorithm SHA256
+```
+
+Para futuras versões, antes de publicar, guarde a senha em um gerenciador seguro, crie backups criptografados independentes da keystore, valide em aparelhos físicos AOSP, Samsung, Xiaomi e Motorola, verifique assinatura/certificado e confira versão/tamanho. Um emulador não substitui esses testes.
+
+> [!warning] Exceção de publicação v1.2 — 17/11/2026
+> Por autorização expressa do responsável, a versão 1.2 foi publicada apesar de ainda estarem pendentes os backups criptografados da keystore e a validação em aparelhos físicos. Essa exceção não substitui essas pendências nem comprova compatibilidade fora do AVD RustDroid Android 14/AOSP.
+
+## APK oficial em distribuição
+
+- **Versão**: 1.2 (versionCode 3), Android 8.0+.
+- **Arquivo no site**: `web\public\downloads\desinstalaja-v1.2.apk`.
+- **Tamanho**: 1.959.699 bytes (1,96 MB).
+- **Assinatura**: chave própria de produção, esquema v2; certificado SHA-256 `a03e94c2eeb7439db5e9ac6326891cecd23a2d4595e5838a52a6dd61698ba741`.
+- **Validação**: 28 testes unitários, lint e build Release passaram. A automação removeu o app descartável no AVD RustDroid Android 14/AOSP; validação física permanece pendente.
+- **SHA-256 do APK**: `2fc05de7598ae2cabfce8497dcc86c87e8d7cb785b16f92a8db867464c8d8b09`.
+
+O `targetSdk` permanece em 35; não foi alterado para requisitos de loja. A versão 1.2 (versionCode 3), com 1.959.699 bytes, está publicada em `web\public\downloads\desinstalaja-v1.2.apk`.
+
+## Limitações de validação
+
+Testes unitários verificam regras locais, não substituem testes do fluxo do instalador em aparelhos reais. O serviço restringe-se aos pacotes de instalador conhecidos de AOSP/Pixel, Xiaomi e Samsung; interfaces diferentes ou conteúdo inacessível exigirão confirmação manual. A validação em aparelhos físicos e os backups criptografados da keystore de produção permanecem pendentes apesar da publicação excepcional autorizada.

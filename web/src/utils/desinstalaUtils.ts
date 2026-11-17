@@ -1,13 +1,13 @@
 import QRCode from 'qrcode';
 
 export const OFFICIAL_SITE_URL = 'https://desinstalador-android.vercel.app';
-export const OFFICIAL_DOWNLOAD_URL =
-  'https://drive.usercontent.google.com/download?id=1A3_Tfgt3e6aMz2w-SveTy4DrbQICUGoy&export=download&confirm=t';
+export const OFFICIAL_DOWNLOAD_URL = '/downloads/desinstalaja-v1.2.apk';
+export const DOWNLOAD_AVAILABLE = true;
 
 export const APP_FACTS = {
   name: 'DesinstalaJá',
-  version: '1.1',
-  sizeLabel: '~1,13 MB',
+  version: '1.2',
+  sizeLabel: '1.96 MB',
   minAndroid: 'Android 8.0+',
   internetPermission: false,
   rootRequired: false,
@@ -139,19 +139,19 @@ export const WORKFLOW_STEPS: WorkflowStep[] = [
     title: 'Inicie a fila de desinstalações',
     shortLabel: 'Iniciar fila',
     description:
-      'O DesinstalaJá enfileira os pedidos e aciona os diálogos oficiais do instalador do Android em sequência, sem você ter que voltar à lista a cada item.',
+      'O DesinstalaJá organiza os pedidos e abre os diálogos oficiais do instalador do Android em sequência. O suporte e o comportamento variam conforme o instalador do aparelho.',
     detailNote:
-      'Estimativa aproximada: cerca de 12 segundos para 15 apps quando a acessibilidade está ativa — o tempo real varia conforme o aparelho e a resposta dos diálogos do Android.',
+      'A duração depende do aparelho e não há meta de tempo medida. A fila só avança após verificar a remoção; sem evidência suficiente, pede confirmação manual.',
   },
   {
     id: 3,
     indexLabel: '03',
-    title: 'Acessibilidade confirma os diálogos nativos',
+    title: 'Confirmação opcional e delimitada',
     shortLabel: 'Confirmar diálogos',
     description:
-      'Com o serviço de acessibilidade habilitado explicitamente por você, o app toca no botão de confirmação dos diálogos nativos do Android respeitando limites de segurança.',
+      'Com divulgação e consentimento explícitos, o serviço tenta confirmar apenas diálogos cujo instalador, aplicativo de destino e ação de desinstalação sejam reconhecidos com segurança.',
     detailNote:
-      'Não é desinstalação silenciosa: o fluxo usa as telas oficiais do sistema e pode ser interrompido a qualquer momento.',
+      'Apps do sistema, nomes ambíguos, instaladores incompatíveis ou evidência insuficiente ficam para confirmação manual.',
   },
 ];
 

@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowDownToLine, ArrowRight, FileText, ShieldCheck, X } from 'lucide-react';
 import BrandMark from './BrandMark';
-import { APP_FACTS, OFFICIAL_DOWNLOAD_URL } from '../utils/desinstalaUtils';
+import {
+  APP_FACTS,
+  DOWNLOAD_AVAILABLE,
+  OFFICIAL_DOWNLOAD_URL,
+} from '../utils/desinstalaUtils';
 import { useScrollReveal } from '../utils/useScrollReveal';
 
 type LegalModalType = 'terms' | 'privacy' | null;
@@ -74,20 +78,28 @@ export default function ClosingCtaAndFooter() {
             Baixe o DesinstalaJá e limpe aplicativos em fila.
           </h2>
           <p className="text-base text-[#8E9BB0] max-w-2xl mx-auto leading-relaxed mb-8">
-            Versão {APP_FACTS.version} ({APP_FACTS.sizeLabel}) para {APP_FACTS.minAndroid}. Funciona offline, sem root e sem anúncios.
+            Versão {APP_FACTS.version} para {APP_FACTS.minAndroid}. APK oficial assinado: {APP_FACTS.sizeLabel}.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4">
-            <a
-              href={OFFICIAL_DOWNLOAD_URL}
-              rel="noopener noreferrer"
-              className="group btn-lift cta-glow-spin inline-flex items-center justify-center whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F59E0B]"
-            >
-              <span className="relative z-10 inline-flex items-center justify-center gap-2.5 px-[26px] py-[14px] rounded-[8px] text-base font-semibold text-[#04060A] bg-[#F59E0B] group-hover:bg-[#FBBF24] transition-colors">
-                <ArrowDownToLine className="w-5 h-5" aria-hidden="true" />
-                <span>Baixar APK oficial</span>
-              </span>
-            </a>
+            {DOWNLOAD_AVAILABLE ? (
+              <a
+                href={OFFICIAL_DOWNLOAD_URL}
+                className="group btn-lift cta-glow-spin inline-flex items-center justify-center whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F59E0B]"
+              >
+                <span className="relative z-10 inline-flex items-center justify-center gap-2.5 px-[26px] py-[14px] rounded-[8px] text-base font-semibold text-[#04060A] bg-[#F59E0B] group-hover:bg-[#FBBF24] transition-colors">
+                  <ArrowDownToLine className="w-5 h-5" aria-hidden="true" />
+                  <span>Baixar APK oficial</span>
+                </span>
+              </a>
+            ) : (
+              <a
+                href="#download"
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-lg border border-[#1A2338] px-[26px] py-[14px] text-base font-semibold text-[#8E9BB0]"
+              >
+                Download indisponível
+              </a>
+            )}
 
             <a
               href="#faq"
@@ -196,7 +208,7 @@ export default function ClosingCtaAndFooter() {
                   <strong className="text-[#F8FAFC]">Acessibilidade e limites:</strong> a confirmação assistida dos diálogos requer ativação explícita pelo usuário nas configurações do Android e conta com proteções contra pacotes críticos do sistema e interrupção diante de telas personalizadas pelo fabricante.
                 </p>
                 <p>
-                  <strong className="text-[#F8FAFC]">Distribuição oficial:</strong> utilize apenas o APK oficial (versão {APP_FACTS.version}, {APP_FACTS.sizeLabel}) disponibilizado por Neyvan Santos.
+                  <strong className="text-[#F8FAFC]">Distribuição oficial:</strong> o APK 1.2 assinado está disponível nesta página. Verifique a versão e o nome do app antes de instalar.
                 </p>
               </div>
             ) : (
@@ -205,13 +217,13 @@ export default function ClosingCtaAndFooter() {
                   <strong className="text-[#F8FAFC]">Funcionamento 100% offline:</strong> o aplicativo DesinstalaJá não declara permissão de Internet (<code className="font-mono text-xs text-[#F1F5F9]">INTERNET</code>) no manifesto do Android e não realiza conexões de rede.
                 </p>
                 <p>
-                  <strong className="text-[#F8FAFC]">Sem coleta ou envio de dados:</strong> a consulta aos aplicativos instalados (<code className="font-mono text-xs text-[#F1F5F9]">QUERY_ALL_PACKAGES</code>) acontece exclusivamente na memória local do celular para montar a lista de seleção. Nenhuma lista de apps, dado pessoal ou telemetria é transmitida a terceiros.
+                  <strong className="text-[#F8FAFC]">Processamento local:</strong> o inventário de aplicativos e o texto da janela do instalador são processados no aparelho; o texto da janela não é armazenado nem transmitido. Os identificadores dos apps selecionados e o progresso da fila são mantidos em armazenamento privado para permitir recuperação após encerramento do processo. Ao concluir ou cancelar, o estado da fila é removido; a seleção restante permanece local até ser alterada.
                 </p>
                 <p>
                   <strong className="text-[#F8FAFC]">Uso restrito da Acessibilidade:</strong> quando habilitado manualmente por você, o serviço (<code className="font-mono text-xs text-[#F1F5F9]">BIND_ACCESSIBILITY_SERVICE</code>) atua somente durante uma fila iniciada pelo usuário para reconhecer e confirmar o diálogo nativo de desinstalação, sem registrar nem armazenar informações de tela.
                 </p>
                 <p>
-                  <strong className="text-[#F8FAFC]">Este site:</strong> página estática informativa e de download direto, sem anúncios ou cookies de rastreamento.
+                  <strong className="text-[#F8FAFC]">Este site:</strong> página estática informativa, sem anúncios ou cookies de rastreamento. O APK 1.2 é hospedado neste domínio.
                 </p>
               </div>
             )}

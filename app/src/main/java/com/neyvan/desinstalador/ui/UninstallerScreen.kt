@@ -55,6 +55,7 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -85,6 +86,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.neyvan.desinstalador.accessibility.AccessibilityHelper
 import com.neyvan.desinstalador.data.InstalledApp
+import com.neyvan.desinstalador.data.InstalledAppCategory
 import com.neyvan.desinstalador.ui.theme.OutlineBorder
 import com.neyvan.desinstalador.ui.theme.PanelElevated
 
@@ -94,6 +96,8 @@ fun UninstallerRoute(viewModel: UninstallerViewModel = viewModel()) {
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
     var showConfirmDialog by remember { mutableStateOf(false) }
+    var showAccessibilityDisclosure by remember { mutableStateOf(false) }
+    var showSystemAppsWarning by remember { mutableStateOf(false) }
 
     val uninstallLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -102,19 +106,27 @@ fun UninstallerRoute(viewModel: UninstallerViewModel = viewModel()) {
     }
 
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
-        if (!state.isUninstalling) {
+        if (!state.isLoading && !state.isUninstalling && !state.queue.isPaused) {
             viewModel.refreshApps()
             viewModel.checkAccessibilityStatus()
         }
     }
 
-    LaunchedEffect(state.intentUninstallPackage) {
-        val packageName = state.intentUninstallPackage ?: return@LaunchedEffect
+    LaunchedEffect(state.pendingUninstallLaunch) {
+        val pending = state.pendingUninstallLaunch ?: return@LaunchedEffect
+        if (pending.dispatched || !viewModel.canLaunch(pending)) return@LaunchedEffect
         val intent = Intent(Intent.ACTION_DELETE).apply {
-            data = Uri.parse("package:$packageName")
+            data = Uri.parse("package:${pending.packageName}")
             putExtra(Intent.EXTRA_RETURN_RESULT, true)
         }
-        uninstallLauncher.launch(intent)
+        try {
+            uninstallLauncher.launch(intent)
+            viewModel.onIntentLaunchDispatched(pending)
+        } catch (_: android.content.ActivityNotFoundException) {
+            viewModel.onUninstallLaunchFailed(pending)
+        } catch (_: SecurityException) {
+            viewModel.onUninstallLaunchFailed(pending)
+        }
     }
 
     LaunchedEffect(state.lastMessage) {
@@ -131,7 +143,7 @@ fun UninstallerRoute(viewModel: UninstallerViewModel = viewModel()) {
             text = {
                 Text(
                     if (state.accessibilityReady) {
-                        "O app vai confirmar automaticamente cada desinstalação na tela com segurança."
+                        "A confirmação automática só ocorrerá se o instalador e o aplicativo exibido corresponderem ao item atual. Em qualquer dúvida, você precisará confirmar manualmente."
                     } else {
                         "O modo automático está desligado. O Android vai pedir confirmação em cada app."
                     }
@@ -155,19 +167,148 @@ fun UninstallerRoute(viewModel: UninstallerViewModel = viewModel()) {
         )
     }
 
+    if (showAccessibilityDisclosure) {
+        AlertDialog(
+            onDismissRequest = { showAccessibilityDisclosure = false },
+            title = { Text("Uso do serviço de acessibilidade") },
+            text = {
+                Text(
+                    "O DesinstalaJá usa o serviço somente durante uma fila iniciada por você. Ele lê o texto e os botões da janela do instalador Android para conferir se o app exibido corresponde ao pacote selecionado e, apenas quando a identidade e o botão de desinstalação forem reconhecidos, toca nesse botão. Apps do sistema, nomes ambíguos ou diálogos não reconhecidos exigem confirmação manual. O processamento ocorre no dispositivo; o conteúdo da tela não é armazenado nem enviado. Também é possível usar a fila sem ativar o serviço."
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showAccessibilityDisclosure = false
+                        viewModel.acceptAccessibilityDisclosure()
+                        if (!AccessibilityHelper.openAccessibilitySettings(context)) {
+                            viewModel.onAccessibilitySettingsUnavailable()
+                        }
+                    }
+                ) {
+                    Text("Entendi, abrir configurações")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        showAccessibilityDisclosure = false
+                        viewModel.declineAccessibilityDisclosure()
+                    }
+                ) {
+                    Text("Agora não")
+                }
+            }
+        )
+    }
+
+    if (showSystemAppsWarning) {
+        AlertDialog(
+            onDismissRequest = { showSystemAppsWarning = false },
+            title = { Text("Aplicativos do sistema") },
+            text = {
+                Text(
+                    "Esta lista pode incluir componentes importantes do Android ou do fabricante. Eles ficam ocultos por padrão. Pacotes essenciais identificados são bloqueados, mas a classificação não garante que os demais sejam seguros para remover. Verifique cada app antes de selecioná-lo."
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showSystemAppsWarning = false
+                        viewModel.onToggleSystemApps()
+                    }
+                ) {
+                    Text("Mostrar aplicativos do sistema")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showSystemAppsWarning = false }) {
+                    Text("Cancelar")
+                }
+            }
+        )
+    }
+
+    val queueIssue = state.queue.issue
+    if (state.queue.requiresRecovery || queueIssue != null) {
+        val currentLabel = state.queue.currentPackage?.let { packageName ->
+            state.apps.firstOrNull { it.packageName == packageName }?.label ?: packageName
+        }.orEmpty()
+        val recovery = state.queue.requiresRecovery
+        AlertDialog(
+            onDismissRequest = {},
+            title = {
+                Text(
+                    when {
+                        recovery -> "Fila interrompida"
+                        queueIssue == UninstallQueueIssue.CANCELLED -> "Desinstalação cancelada"
+                        queueIssue == UninstallQueueIssue.UNKNOWN -> "Resultado desconhecido"
+                        queueIssue == UninstallQueueIssue.PROTECTED -> "Aplicativo protegido"
+                        else -> "Remoção não confirmada"
+                    }
+                )
+            },
+            text = {
+                Text(
+                    if (recovery) {
+                        "O processo do app foi encerrado durante a fila. O item atual é $currentLabel. Retomar verificará primeiro se ele ainda está instalado; nenhum novo diálogo será aberto sem sua ação."
+                    } else if (queueIssue == UninstallQueueIssue.PROTECTED) {
+                        "$currentLabel está classificado como componente essencial e não pode ser processado pela fila. Você pode pular este item ou cancelar."
+                    } else {
+                        "Não foi possível confirmar a remoção de $currentLabel. A fila foi pausada e os itens pendentes continuam selecionados. Você pode tentar novamente, pular este app ou cancelar a fila."
+                    }
+                )
+            },
+            confirmButton = {
+                if (queueIssue != UninstallQueueIssue.PROTECTED) {
+                    TextButton(
+                        onClick = {
+                            if (recovery) viewModel.resumeRecoveredQueue() else viewModel.retryCurrentPackage()
+                        },
+                        enabled = !state.isQueueOperationPending && (!recovery || !state.isLoading)
+                    ) {
+                        Text(if (recovery) "Retomar fila" else "Tentar novamente")
+                    }
+                }
+            },
+            dismissButton = {
+                Row {
+                    if (!recovery) {
+                        TextButton(
+                            onClick = viewModel::skipCurrentPackage,
+                            enabled = !state.isQueueOperationPending
+                        ) {
+                            Text("Pular app")
+                        }
+                    }
+                    TextButton(onClick = viewModel::cancelQueue) {
+                        Text("Cancelar fila")
+                    }
+                }
+            }
+        )
+    }
+
     UninstallerScreen(
         state = state,
         snackbarHostState = snackbarHostState,
         onSearchChange = viewModel::onSearchChange,
-        onToggleSystemApps = viewModel::onToggleSystemApps,
         onSortOrderChange = viewModel::onSortOrderChange,
         onToggleApp = viewModel::onToggleApp,
         onSelectAllVisible = viewModel::onSelectAllVisible,
         onClearSelection = viewModel::onClearSelection,
         onEnableFastMode = {
-            AccessibilityHelper.openAccessibilitySettings(context)
+            showAccessibilityDisclosure = true
         },
-        onUninstallClick = { showConfirmDialog = true }
+        onToggleSystemApps = {
+            if (state.showSystemApps) {
+                viewModel.onToggleSystemApps()
+            } else {
+                showSystemAppsWarning = true
+            }
+        },
+        onUninstallClick = { showConfirmDialog = true },
+        onCancelQueue = viewModel::cancelQueue
     )
 }
 
@@ -183,11 +324,14 @@ private fun UninstallerScreen(
     onSelectAllVisible: () -> Unit,
     onClearSelection: () -> Unit,
     onEnableFastMode: () -> Unit,
-    onUninstallClick: () -> Unit
+    onUninstallClick: () -> Unit,
+    onCancelQueue: () -> Unit
 ) {
     val visible = state.visibleApps
+    val selectableVisible = visible.filterNot(InstalledApp::isProtected)
     val selectedCount = state.selectedPackages.size
-    val allVisibleSelected = visible.isNotEmpty() && visible.all { it.packageName in state.selectedPackages }
+    val allVisibleSelected = selectableVisible.isNotEmpty() &&
+        selectableVisible.all { it.packageName in state.selectedPackages }
     val filterScrollState = rememberScrollState()
 
     Scaffold(
@@ -195,16 +339,25 @@ private fun UninstallerScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         bottomBar = {
             AnimatedVisibility(
-                visible = selectedCount > 0,
+                visible = state.queue.remainingPackages.isNotEmpty() || selectedCount > 0,
                 enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
                 exit = slideOutVertically(targetOffsetY = { it }) + fadeOut()
             ) {
-                UninstallBar(
-                    count = selectedCount,
-                    uninstalling = state.isUninstalling,
-                    onClear = onClearSelection,
-                    onUninstall = onUninstallClick
-                )
+                if (state.queue.remainingPackages.isNotEmpty()) {
+                    UninstallProgressBar(
+                        state = state,
+                        onCancel = onCancelQueue
+                    )
+                } else {
+                    UninstallBar(
+                        count = selectedCount,
+                        uninstalling = state.isUninstalling,
+                        waitingForInstaller = state.pendingUninstallLaunch != null &&
+                            state.queue.remainingPackages.isEmpty(),
+                        onClear = onClearSelection,
+                        onUninstall = onUninstallClick
+                    )
+                }
             }
         }
     ) { innerPadding ->
@@ -228,9 +381,14 @@ private fun UninstallerScreen(
                 )
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    text = "Selecione múltiplos apps para remoção rápida e em lote",
+                    text = "Selecione múltiplos apps e organize a remoção em fila",
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodyMedium
+                )
+                Text(
+                    text = "A seleção e o progresso da fila ficam no armazenamento privado deste dispositivo.",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.labelSmall
                 )
             }
 
@@ -307,7 +465,7 @@ private fun UninstallerScreen(
                 )
                 FilterChip(
                     selected = state.showSystemApps,
-                    onClick = { if (!state.showSystemApps) onToggleSystemApps() },
+                    onClick = onToggleSystemApps,
                     label = { Text("Sistema") },
                     colors = filterColors()
                 )
@@ -372,7 +530,7 @@ private fun UninstallerScreen(
                 Spacer(Modifier.weight(1f))
                 TextButton(
                     onClick = onSelectAllVisible,
-                    enabled = visible.isNotEmpty(),
+                    enabled = selectableVisible.isNotEmpty(),
                     modifier = Modifier.height(44.dp)
                 ) {
                     Text(
@@ -406,6 +564,10 @@ private fun UninstallerScreen(
                         AppRow(
                             app = app,
                             selected = app.packageName in state.selectedPackages,
+                            enabled = !app.isProtected &&
+                                !state.isQueueOperationPending &&
+                                !state.queue.isRunning &&
+                                !state.queue.isPaused,
                             onToggle = { onToggleApp(app.packageName) }
                         )
                     }
@@ -427,7 +589,7 @@ private fun SilentStatusBanner(isAuto: Boolean, onEnable: () -> Unit) {
                 color = if (isAuto) MaterialTheme.colorScheme.primary.copy(alpha = 0.4f) else MaterialTheme.colorScheme.outline,
                 shape = RoundedCornerShape(16.dp)
             )
-            .clickable(enabled = !isAuto, onClick = onEnable)
+            .clickable(onClick = onEnable)
             .padding(horizontal = 16.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -451,7 +613,11 @@ private fun SilentStatusBanner(isAuto: Boolean, onEnable: () -> Unit) {
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
             Text(
-                text = if (isAuto) "Desinstalação automática ativa" else "Desinstalação automática desligada",
+                text = if (isAuto) {
+                    "Serviço ativo • revisar divulgação"
+                } else {
+                    "Confirmação automática opcional"
+                },
                 fontWeight = FontWeight.SemiBold,
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
@@ -459,9 +625,9 @@ private fun SilentStatusBanner(isAuto: Boolean, onEnable: () -> Unit) {
             Spacer(Modifier.height(2.dp))
             Text(
                 text = if (isAuto) {
-                    "Os apps selecionados serão confirmados e removidos automaticamente."
+                    "Só confirma diálogos identificados. Os demais exigem sua confirmação manual."
                 } else {
-                    "Toque aqui para ativar o serviço nas configurações do celular."
+                    "Toque para ver como funciona e, se quiser, abrir as configurações."
                 },
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.bodySmall,
@@ -484,6 +650,7 @@ private fun filterColors() = FilterChipDefaults.filterChipColors(
 private fun AppRow(
     app: InstalledApp,
     selected: Boolean,
+    enabled: Boolean,
     onToggle: () -> Unit
 ) {
     val context = LocalContext.current
@@ -497,13 +664,14 @@ private fun AppRow(
                 color = if (selected) MaterialTheme.colorScheme.primary.copy(alpha = 0.6f) else MaterialTheme.colorScheme.outline,
                 shape = RoundedCornerShape(16.dp)
             )
-            .clickable(onClick = onToggle)
+            .clickable(enabled = enabled, onClick = onToggle)
             .padding(horizontal = 14.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Checkbox(
             checked = selected,
             onCheckedChange = null,
+            enabled = enabled,
             colors = CheckboxDefaults.colors(
                 checkedColor = MaterialTheme.colorScheme.primary,
                 checkmarkColor = MaterialTheme.colorScheme.onPrimary,
@@ -532,7 +700,7 @@ private fun AppRow(
             ) {
                 if (app.formattedSize.isNotEmpty()) {
                     Text(
-                        text = app.formattedSize,
+                        text = "APKs: ${app.formattedSize}",
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Medium,
                         style = MaterialTheme.typography.labelSmall
@@ -545,8 +713,13 @@ private fun AppRow(
                 }
                 if (app.isSystem) {
                     Text(
-                        text = "Sistema",
-                        color = MaterialTheme.colorScheme.error,
+                        text = when (app.category) {
+                            InstalledAppCategory.USER_APP -> ""
+                            InstalledAppCategory.SYSTEM_APP -> "Sistema"
+                            InstalledAppCategory.UPDATED_SYSTEM_APP -> "Sistema atualizado"
+                            InstalledAppCategory.CRITICAL_SYSTEM_APP -> "Essencial • protegido"
+                        },
+                        color = if (app.isProtected) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.tertiary,
                         fontWeight = FontWeight.Medium,
                         style = MaterialTheme.typography.labelSmall
                     )
@@ -585,9 +758,67 @@ private fun AppIcon(app: InstalledApp, packageManager: android.content.pm.Packag
 }
 
 @Composable
+private fun UninstallProgressBar(
+    state: UninstallerUiState,
+    onCancel: () -> Unit
+) {
+    val currentPackage = state.queue.currentPackage
+    val currentLabel = currentPackage?.let { packageName ->
+        state.apps.firstOrNull { it.packageName == packageName }?.label ?: packageName
+    }.orEmpty()
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
+            .background(PanelElevated)
+            .border(1.dp, OutlineBorder, RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
+            .navigationBarsPadding()
+            .padding(horizontal = 20.dp, vertical = 14.dp)
+    ) {
+        Text(
+            text = if (state.queue.isRunning) "Desinstalando aplicativos..." else "Fila pausada",
+            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+        if (currentLabel.isNotEmpty()) {
+            Text(
+                text = "Atual: $currentLabel",
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodySmall,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+        Spacer(Modifier.height(8.dp))
+        LinearProgressIndicator(
+            progress = { state.queue.progress },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(Modifier.height(6.dp))
+        Text(
+            text = "${state.queue.completedCount} de ${state.queue.totalCount} concluídos • Restam ${state.queue.remainingCount}",
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = MaterialTheme.typography.bodySmall
+        )
+        TextButton(
+            onClick = onCancel,
+            enabled = state.queue.remainingPackages.isNotEmpty(),
+            modifier = Modifier
+                .align(Alignment.End)
+                .height(44.dp)
+        ) {
+            Text("Cancelar fila")
+        }
+    }
+}
+
+@Composable
 private fun UninstallBar(
     count: Int,
     uninstalling: Boolean,
+    waitingForInstaller: Boolean,
     onClear: () -> Unit,
     onUninstall: () -> Unit
 ) {
@@ -621,7 +852,11 @@ private fun UninstallBar(
                 )
                 Spacer(Modifier.width(12.dp))
                 Text(
-                    "Desinstalando aplicativos...",
+                    if (waitingForInstaller) {
+                        "Aguardando retorno do instalador..."
+                    } else {
+                        "Desinstalando aplicativos..."
+                    },
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.bodyLarge
                 )

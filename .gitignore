@@ -11,6 +11,7 @@
 app/build
 *.apk
 /tools
+!web/public/downloads/desinstalaja-v1.2.apk
 *.ap_
 *.aab
 *.dex

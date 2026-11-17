@@ -42,17 +42,23 @@ test('SEO metadata, branded assets, and the Vercel output are configured', () =>
   assert.ok(icon.readUInt16LE(4) > 0);
   assert.ok(fs.existsSync(path.join(webRoot, 'public', 'logo.png')));
   assert.equal(JSON.parse(readText('vercel.json')).outputDirectory, 'dist');
+  assert.ok(
+    JSON.stringify(JSON.parse(readText('vercel.json')).headers)
+      .includes('/downloads/desinstalaja-v1.2.apk')
+  );
 });
 
 test('all download actions use the current official APK URL', () => {
-  const officialUrl =
-    'https://drive.usercontent.google.com/download?id=1A3_Tfgt3e6aMz2w-SveTy4DrbQICUGoy&export=download&confirm=t';
-
-  assert.ok(utils.includes(officialUrl));
-  assert.match(hero, /href=\{OFFICIAL_DOWNLOAD_URL\}/);
-  assert.match(readText('src/components/Navbar.tsx'), /href=\{OFFICIAL_DOWNLOAD_URL\}/);
-  assert.match(download, /href=\{OFFICIAL_DOWNLOAD_URL\}/);
-  assert.match(footer, /href=\{OFFICIAL_DOWNLOAD_URL\}/);
+  assert.ok(utils.includes("'/downloads/desinstalaja-v1.2.apk'"));
+  assert.match(utils, /DOWNLOAD_AVAILABLE = true/);
+  assert.doesNotMatch(utils, /drive\.usercontent\.google\.com/);
+  assert.match(hero, /DOWNLOAD_AVAILABLE \?/);
+  assert.match(readText('src/components/Navbar.tsx'), /DOWNLOAD_AVAILABLE \?/);
+  assert.match(download, /DOWNLOAD_AVAILABLE \?/);
+  assert.match(footer, /DOWNLOAD_AVAILABLE \?/);
+  const apkPath = path.join(webRoot, 'public', 'downloads', 'desinstalaja-v1.2.apk');
+  assert.ok(fs.existsSync(apkPath));
+  assert.ok(fs.statSync(apkPath).size > 0);
 });
 
 test('the download section does not link back to the current site', () => {

@@ -2,5 +2,5 @@
 <resources>
     <string name="app_name">DesinstalaJá</string>
     <string name="accessibility_service_name">Desinstalação Automática</string>
-    <string name="accessibility_service_description">Permite que o aplicativo DesinstalaJá confirme automaticamente as mensagens de desinstalação sem precisar clicar uma a uma.</string>
+    <string name="accessibility_service_description">Durante uma fila iniciada por você, verifica a janela do instalador e só confirma automaticamente o aplicativo selecionado quando a identidade e o botão são reconhecidos. Caso contrário, deixa a confirmação manual.</string>
 </resources>

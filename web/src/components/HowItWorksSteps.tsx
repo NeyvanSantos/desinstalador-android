@@ -24,7 +24,7 @@ export default function HowItWorksSteps() {
             Como a fila de desinstalação funciona no Android.
           </h2>
           <p className="text-sm sm:text-base text-[#8E9BB0] leading-relaxed mt-3">
-            O DesinstalaJá não substitui o instalador do sistema. Ele organiza seus itens em fila e, se você habilitar a acessibilidade, confirma os diálogos oficiais um por um.
+            O DesinstalaJá não substitui o instalador do sistema. Ele organiza seus itens em fila; a confirmação por acessibilidade é opcional e depende das informações que cada instalador disponibiliza.
           </p>
         </div>
 
@@ -130,12 +130,12 @@ export default function HowItWorksSteps() {
                       <div className="h-full w-1/3 bg-[#F59E0B] rounded-full" />
                     </div>
                     <p className="text-xs text-[#8E9BB0] mt-3 leading-relaxed">
-                      Cada item dispara a intent padrão de desinstalação do Android até concluir toda a lista ou até você interromper.
+                      Cada item abre o diálogo oficial. A fila só avança após confirmar a remoção; se o resultado for incerto, ela pausa para você tentar novamente, ignorar ou cancelar.
                     </p>
                   </div>
 
                   <div className="p-4 rounded-lg border border-[#1A2338] bg-[#04060A] text-xs text-[#8E9BB0] leading-relaxed">
-                    Em testes práticos, uma fila de 15 aplicativos leva em torno de 12 segundos — número aproximado que depende do desempenho do aparelho e do tempo dos diálogos do sistema.
+                    A duração depende do aparelho e do PackageInstaller. Não divulgamos um tempo fixo sem medição reproduzível.
                   </div>
                 </div>
               )}
@@ -148,7 +148,7 @@ export default function HowItWorksSteps() {
                       Deseja desinstalar este app?
                     </p>
                     <p className="text-xs text-[#8E9BB0] mb-5">
-                      O serviço de acessibilidade identifica apenas a janela do instalador do Android durante uma fila iniciada por você e toca no botão de confirmação.
+                      Se você consentir, o serviço só toca no botão positivo quando reconhece o instalador, o app de usuário selecionado e o diálogo. Apps do sistema ou casos ambíguos exigem confirmação manual.
                     </p>
                     <div className="flex items-center justify-end gap-3">
                       <span className="px-3.5 py-2 text-xs font-medium text-[#8E9BB0] border border-[#1A2338] rounded-lg">
@@ -162,7 +162,7 @@ export default function HowItWorksSteps() {
                   </div>
 
                   <p className="text-xs text-[#8E9BB0] leading-relaxed">
-                    Importante: não há desinstalação silenciosa oculta. Você precisa habilitar manualmente o serviço de acessibilidade nas configurações do aparelho antes de usar a confirmação assistida.
+                    Importante: não há desinstalação silenciosa. O serviço é opcional, exige divulgação e consentimento, e pode deixar qualquer confirmação para você.
                   </p>
                 </div>
               )}

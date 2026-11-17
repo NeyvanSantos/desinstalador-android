@@ -11,7 +11,7 @@ const FAQ_ITEMS = [
   {
     question: 'O DesinstalaJá realiza desinstalação silenciosa sem diálogos?',
     answer:
-      'Não. O aplicativo sempre utiliza os diálogos nativos do instalador do Android. A diferença é que você não precisa selecionar um app por vez na lista do sistema, e o serviço de acessibilidade (se ativado) confirma os diálogos em sequência para acelerar a fila.',
+      'Não. O aplicativo sempre utiliza os diálogos nativos do instalador do Android. A fila organiza os pedidos em sequência, mas o serviço opcional só confirma quando consegue identificar o instalador, o app e a ação com segurança. Se não conseguir, a confirmação manual continua disponível.',
   },
   {
     question: 'Preciso fazer root ou conectar o celular no computador?',
@@ -26,7 +26,7 @@ const FAQ_ITEMS = [
   {
     question: 'Como instalar o APK oficial baixado pelo site?',
     answer:
-      'Toque em “Baixar APK oficial” para baixar o instalador (versão 1.1, cerca de 1,13 MB). Depois, abra o arquivo na barra de notificações ou na pasta Downloads e autorize a opção do Android para instalar aplicativos dessa fonte.',
+      'A versão 1.2 assinada está disponível diretamente nesta página (1,96 MB). Depois do download, abra o arquivo e autorize a instalação para essa fonte nas configurações do Android.',
   },
   {
     question: 'Posso perder dados ou apagar algo importante do sistema?',
